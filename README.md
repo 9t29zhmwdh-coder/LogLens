@@ -1,7 +1,9 @@
 <div align="center">
-<img src="RayStudio.png" alt="RayStudio Logo" width="120"/>
+  <img src="RayStudio.png" alt="RayStudio Logo" width="120"/>
+  <h1>LogLens</h1>
+</div>
 
-# LogLens
+[🇩🇪 Deutsch](README.de.md)
 
 **AI-powered log analysis · Real-time search · Error clustering · Root-cause reports**
 
@@ -9,15 +11,11 @@
 [![Tauri](https://img.shields.io/badge/Tauri-2.x-blue?logo=tauri)](https://tauri.app)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green)](LICENSE)
 
-[🇩🇪 Deutsch](README.de.md)
-
-</div>
-
 ---
 
 ## Overview
 
-LogLens is a cross-platform developer tool that **collects, normalizes, clusters and explains logs** from any source — local files, Docker containers and system logs. It combines full-text search with AI-generated explanations (Claude or Ollama) to reduce triage time from hours to minutes.
+LogLens is a cross-platform developer tool that **collects, normalizes, clusters and explains logs** from any source — local files, Docker containers and system logs. It combines full-text search with AI-generated explanations (local AI via Ollama) to reduce triage time from hours to minutes.
 
 ## Features
 
@@ -28,7 +26,7 @@ LogLens is a cross-platform developer tool that **collects, normalizes, clusters
 | **Stacktrace merging** | Multi-line stacktraces (Rust, Java, Python, JS) are automatically combined into a single entry |
 | **Error clustering** | Fingerprinting strips UUIDs, IPs, timestamps → groups similar errors with similarity matching |
 | **FTS5 full-text search** | SQLite FTS5 with ranked search, phrase queries and operator support |
-| **AI explain** | Per-entry explanation: what happened, why, how to fix — powered by Claude or Ollama |
+| **AI explain** | Per-entry explanation: what happened, why, how to fix — powered by local AI (Ollama) |
 | **AI block summary** | Summarize a time window: overview, key issues, root causes, recommendations |
 | **Root-cause analysis** | Cluster-level deep dive: contributing factors, numbered fix steps with commands |
 | **Timeline** | Stacked area chart of errors/warnings per minute — spike detection built in |
@@ -70,7 +68,7 @@ LogLens
 │   ├── clustering/          — Fingerprinting + similarity grouper
 │   ├── query/               — FTS5 query engine + AI natural-language translation
 │   ├── timeline/            — Spike detection + service correlation
-│   ├── ai/                  — Claude + Ollama backends (explain / summarize / root-cause)
+│   ├── ai/                  — local AI backends (Ollama) (explain / summarize / root-cause)
 │   ├── export/              — JSON + Markdown export
 │   └── db/                  — SQLite with FTS5 migrations
 ├── crates/ll-cli/           — CLI binary
@@ -90,14 +88,14 @@ LogLens
 | File watching | notify + notify-debouncer-full |
 | Docker | bollard |
 | Clustering | sha2 fingerprinting + strsim similarity |
-| AI | Claude (`claude-haiku-4-5`) + Ollama |
+| AI | Ollama (local AI) |
 | API keys | System keychain (keyring) |
 
 ## Configuration
 
 All settings are stored in `~/.local/share/loglens/` (Linux), `~/Library/Application Support/ch.raystudio.loglens/` (macOS) or `%APPDATA%\loglens\` (Windows).
 
-The Claude API key is stored in the **system keychain** — never in plain text files.
+AI credentials are stored in the **system keychain** — never in plain text files.
 
 ---
 
