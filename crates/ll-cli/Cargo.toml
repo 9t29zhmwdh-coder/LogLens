@@ -1,0 +1,20 @@
+[package]
+name    = "ll-cli"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "loglens"
+path = "src/main.rs"
+
+[dependencies]
+ll-core  = { path = "../ll-core" }
+tokio    = { workspace = true }
+anyhow   = { workspace = true }
+tracing  = { workspace = true }
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+clap     = { version = "4", features = ["derive"] }
+serde_json = { workspace = true }
+chrono   = { workspace = true }
+keyring  = "3"
+dirs     = "5"

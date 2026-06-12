@@ -1,0 +1,28 @@
+[package]
+name    = "loglens-tauri"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+name = "loglens_tauri_lib"
+crate-type = ["cdylib", "rlib"]
+
+[[bin]]
+name = "loglens-tauri"
+path = "src/main.rs"
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+ll-core  = { path = "../crates/ll-core" }
+tauri    = { version = "2", features = ["macos-private-api"] }
+tauri-plugin-shell = "2"
+tokio    = { workspace = true }
+serde    = { workspace = true }
+serde_json = { workspace = true }
+anyhow   = { workspace = true }
+tracing  = { workspace = true }
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+keyring  = "3"
+dirs     = "5"
