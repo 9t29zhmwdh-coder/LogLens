@@ -99,9 +99,4 @@ AI credentials are stored in the **system keychain** — never in plain text fil
 
 ---
 
-<div align="right">
-<sub>by</sub><br/>
-<img src="RayStudio.png" alt="RayStudio" width="70"/>
-</div>
-
 **Author:** [Rafael Yilmaz](https://github.com/9t29zhmwdh-coder) · **Status:** Framework Preview · **Last Updated:** June 2026
