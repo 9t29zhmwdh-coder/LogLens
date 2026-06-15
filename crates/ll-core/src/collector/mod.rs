@@ -24,11 +24,11 @@ pub struct LogCollector {
 }
 
 impl LogCollector {
-    pub fn new(tx: mpsc::Sender<NormalizedEntry>) -> Self {
+    pub fn new(tx: mpsc::Sender<NormalizedEntry>, grouper: Arc<ClusterGrouper>) -> Self {
         Self {
             handles: DashMap::new(),
             tx,
-            grouper: Arc::new(ClusterGrouper::new()),
+            grouper,
         }
     }
 

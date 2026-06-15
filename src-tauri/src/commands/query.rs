@@ -24,15 +24,15 @@ pub async fn get_timeline(
 #[tauri::command]
 pub async fn translate_query(nl_query: String, state: State<'_, AppState>) -> Result<ll_core::models::query::QueryFilter> {
     let settings = state.settings.read().await.clone();
-    let (api_key, model) = if settings.ai_backend == "ollama" {
-        (settings.ollama_url.clone(), settings.ollama_model.clone())
+    let (base_url, api_key, model) = if settings.ai_backend == "ollama" {
+        (settings.ollama_url.clone(), String::new(), settings.ollama_model.clone())
     } else {
         let key = keyring::Entry::new("loglens", "claude_api_key")
             .ok()
             .and_then(|e| e.get_password().ok())
             .unwrap_or_default();
-        (key, "claude-haiku-4-5-20251001".to_string())
+        ("https://api.anthropic.com".to_string(), key, "claude-haiku-4-5-20251001".to_string())
     };
 
-    Ok(ll_core::query::ai_query::translate(&nl_query, &api_key, &api_key, &model).await)
+    Ok(ll_core::query::ai_query::translate(&nl_query, &base_url, &api_key, &model).await)
 }
