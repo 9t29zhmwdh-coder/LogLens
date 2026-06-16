@@ -1,3 +1,4 @@
+#![allow(unused_imports)]
 use std::collections::HashMap;
 use dashmap::DashMap;
 use strsim::normalized_levenshtein;
