@@ -106,6 +106,7 @@ pub async fn run_journald(
 }
 
 /// Windows Event Log via PowerShell `Get-WinEvent`
+#[allow(unused_variables, unused_mut, unreachable_code)]
 pub async fn run_windows_event(
     source: LogSource,
     channel: String,
