@@ -1,5 +1,6 @@
 use clap::{Parser, Subcommand};
 use anyhow::Result;
+use ll_core::ai::AiAnalyzer;
 use tracing_subscriber::EnvFilter;
 
 #[derive(Parser)]
@@ -117,7 +118,8 @@ async fn cmd_watch(target: &str, min_level: &str, auto_ai: bool, db_path: &std::
     let pool = ll_core::db::open(db_path).await?;
 
     let (tx, mut rx) = mpsc::channel(1024);
-    let collector = LogCollector::new(tx);
+    let grouper = std::sync::Arc::new(ll_core::clustering::ClusterGrouper::new());
+    let collector = LogCollector::new(tx, grouper);
 
     let (source, kind) = if let Some(container) = target.strip_prefix("docker://") {
         let name = container.to_string();
@@ -200,7 +202,8 @@ async fn cmd_search(query: &str, limit: usize, db_path: &std::path::Path) -> Res
     };
 
     let result = engine.query(&req).await?;
-    println!("Found {} entries (showing {}), took {}ms\n", result.total, result.entries.len(), result.took_ms);
+    println!("Found {} entries (showing {}), took {}ms
+", result.total, result.entries.len(), result.took_ms);
 
     for entry in &result.entries {
         let svc = entry.service.as_deref().unwrap_or("-");
@@ -247,12 +250,15 @@ async fn cmd_analyze(cluster_id: &str, db_path: &std::path::Path) -> Result<()> 
 
     println!("Analyzing cluster: {}", cluster.template);
     println!("Occurrences: {}  Level: {:?}", cluster.count, cluster.level);
-    println!("Running AI root-cause analysis...\n");
+    println!("Running AI root-cause analysis...
+");
 
     let report = analyzer.root_cause(&cluster, &[]).await?;
 
-    println!("## {}\n", report.title);
-    println!("**Root Cause:** {}\n", report.root_cause);
+    println!("## {}
+", report.title);
+    println!("**Root Cause:** {}
+", report.root_cause);
 
     if !report.contributing_factors.is_empty() {
         println!("**Contributing Factors:**");
@@ -271,7 +277,8 @@ async fn cmd_analyze(cluster_id: &str, db_path: &std::path::Path) -> Result<()> 
         }
     }
 
-    println!("\nConfidence: {:.0}%", report.confidence * 100.0);
+    println!("
+Confidence: {:.0}%", report.confidence * 100.0);
 
     Ok(())
 }
@@ -279,7 +286,7 @@ async fn cmd_analyze(cluster_id: &str, db_path: &std::path::Path) -> Result<()> 
 async fn cmd_export(
     output: &str,
     _level: Option<&str>,
-    ai_summary: bool,
+    _ai_summary: bool,
     db_path: &std::path::Path,
 ) -> Result<()> {
     use ll_core::query::QueryEngine;
