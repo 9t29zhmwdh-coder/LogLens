@@ -82,8 +82,8 @@ pub async fn run_service(
     };
 
     // Resolve all container IDs matching the service label
-    let mut filters = std::collections::HashMap::new();
-    filters.insert("label", vec![format!("com.docker.compose.service={}", service_name)]);
+    let mut filters: std::collections::HashMap<String, Vec<String>> = std::collections::HashMap::new();
+    filters.insert("label".to_string(), vec![format!("com.docker.compose.service={}", service_name)]);
 
     let containers = match docker.list_containers(Some(bollard::container::ListContainersOptions {
         filters,
