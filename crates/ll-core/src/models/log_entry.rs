@@ -15,6 +15,7 @@ pub enum LogLevel {
 }
 
 impl LogLevel {
+    #[allow(clippy::should_implement_trait)]
     pub fn from_str(s: &str) -> Self {
         match s.to_ascii_lowercase().trim_matches(|c: char| !c.is_alphanumeric()) {
             "trace" => Self::Trace,
