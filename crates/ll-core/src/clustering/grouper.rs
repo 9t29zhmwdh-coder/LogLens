@@ -40,10 +40,10 @@ impl ClusterGrouper {
         let mut best_match: Option<(String, f64)> = None;
         for cluster in self.clusters.iter() {
             let score = normalized_levenshtein(&template, &cluster.template);
-            if score >= SIMILARITY_THRESHOLD {
-                if best_match.as_ref().map_or(true, |(_, s)| score > *s) {
-                    best_match = Some((cluster.id.clone(), score));
-                }
+            if score >= SIMILARITY_THRESHOLD
+                && best_match.as_ref().is_none_or(|(_, s)| score > *s)
+            {
+                best_match = Some((cluster.id.clone(), score));
             }
         }
 
@@ -102,7 +102,7 @@ impl ClusterGrouper {
             .filter(|e| e.level >= LogLevel::Error)
             .map(|e| e.value().clone())
             .collect();
-        clusters.sort_by(|a, b| b.count.cmp(&a.count));
+        clusters.sort_by_key(|c| std::cmp::Reverse(c.count));
         clusters.truncate(n);
         clusters
     }
