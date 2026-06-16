@@ -121,7 +121,7 @@ async fn cmd_watch(target: &str, min_level: &str, auto_ai: bool, db_path: &std::
     let grouper = std::sync::Arc::new(ll_core::clustering::ClusterGrouper::new());
     let collector = LogCollector::new(tx, grouper);
 
-    let (source, kind) = if let Some(container) = target.strip_prefix("docker://") {
+    let (source, _kind) = if let Some(container) = target.strip_prefix("docker://") {
         let name = container.to_string();
         let kind = LogSourceKind::DockerContainer {
             container_id: name.clone(),
