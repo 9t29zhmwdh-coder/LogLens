@@ -41,7 +41,7 @@ impl SpikeDetector {
 
         // Evict old entries
         let cutoff = now - Duration::seconds(WINDOW_SIZE as i64);
-        while self.window.front().map_or(false, |t| *t < cutoff) {
+        while self.window.front().is_some_and(|t| *t < cutoff) {
             self.window.pop_front();
         }
 
