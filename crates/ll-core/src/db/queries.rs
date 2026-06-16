@@ -47,7 +47,7 @@ pub async fn delete_source(pool: &SqlitePool, id: &str) -> Result<()> {
 
 pub async fn insert_entry(pool: &SqlitePool, entry: &NormalizedEntry) -> Result<()> {
     let stacktrace = entry.stacktrace.as_ref()
-        .map(|v| serde_json::to_string(v))
+        .map(serde_json::to_string)
         .transpose()?;
     let fields = serde_json::to_string(&entry.fields)?;
     let format = format!("{:?}", entry.format).to_lowercase();
