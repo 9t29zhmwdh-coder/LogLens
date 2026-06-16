@@ -37,7 +37,7 @@ impl PluginRegistry {
 
     pub fn detect(&self, source: &LogSource) -> Option<Box<dyn LogParserPlugin>> {
         for factory in self.factories.values() {
-            let mut plugin = factory.create();
+            let plugin = factory.create();
             if plugin.can_handle(source) {
                 return Some(plugin);
             }
