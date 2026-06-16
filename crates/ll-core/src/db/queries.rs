@@ -2,7 +2,7 @@ use sqlx::SqlitePool;
 use anyhow::Result;
 use crate::models::log_entry::{NormalizedEntry, LogSource, LogSourceKind};
 use crate::models::cluster::LogCluster;
-use crate::models::analysis::{AiExplanation, AiSummary, RootCauseReport};
+use crate::models::analysis::AiExplanation;
 
 // ── Log Sources ───────────────────────────────────────────────
 
@@ -89,6 +89,7 @@ pub async fn upsert_cluster(pool: &SqlitePool, c: &LogCluster) -> Result<()> {
     let services = serde_json::to_string(&c.services)?;
     let level = format!("{:?}", c.level).to_lowercase();
 
+    let cluster_count = c.count as i64;
     sqlx::query!(
         "INSERT INTO log_clusters
          (id, fingerprint, template, level, count, first_seen, last_seen, source_ids, sample_ids, services, ai_summary)
@@ -100,7 +101,7 @@ pub async fn upsert_cluster(pool: &SqlitePool, c: &LogCluster) -> Result<()> {
            sample_ids = excluded.sample_ids,
            services = excluded.services,
            ai_summary = excluded.ai_summary",
-        c.id, c.fingerprint, c.template, level, c.count as i64,
+        c.id, c.fingerprint, c.template, level, cluster_count,
         c.first_seen, c.last_seen, source_ids, sample_ids, services, c.ai_summary
     )
     .execute(pool).await?;
