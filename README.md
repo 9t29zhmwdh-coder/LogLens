@@ -3,7 +3,7 @@
   <h1>LogLens</h1>
 </div>
 
-[🇩🇪 Deutsch](README.de.md)
+[🇩🇪 Deutsche Version](README.de.md)
 
 **AI-powered log analysis · Real-time search · Error clustering · Root-cause reports**
 
