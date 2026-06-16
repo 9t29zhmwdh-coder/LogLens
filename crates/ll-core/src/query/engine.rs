@@ -152,6 +152,7 @@ struct EntryRow {
     cluster_id: Option<String>, ingested_at: String,
 }
 
+#[allow(clippy::too_many_arguments)]
 fn row_to_entry(
     id: String, source_id: String, source_label: String,
     timestamp: String, level: String, service: Option<String>,
