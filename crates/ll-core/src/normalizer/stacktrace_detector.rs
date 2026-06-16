@@ -2,7 +2,7 @@ use once_cell::sync::Lazy;
 use regex::Regex;
 
 static CONTINUATION: Lazy<Regex> = Lazy::new(|| {
-    Regex::new(r"(?x)
+    Regex::new(r#"(?x)
         ^\s{2,}                          |  # indented (Python/Java)
         ^\tat\s                           |  # Java: \tat com.example...
         ^at\s+\S+\s*\(                   |  # JS: at fn (file:line:col)
@@ -13,7 +13,7 @@ static CONTINUATION: Lazy<Regex> = Lazy::new(|| {
         ^\s+\.\.\.\s+\d+\s+more          |  # Java: ... N more
         ^note:                            |  # Rust note:
         ^caused by:                          # lowercase variant
-    ").unwrap()
+    "#).unwrap()
 });
 
 pub fn is_continuation(line: &str) -> bool {
