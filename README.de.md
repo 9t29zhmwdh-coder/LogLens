@@ -17,21 +17,21 @@
 
 ## Übersicht
 
-LogLens ist ein plattformübergreifendes Entwicklerwerkzeug, das **Logs aus beliebigen Quellen sammelt, normalisiert, clustert und erklärt** — lokale Dateien, Docker-Container und Systemlogs. Die Kombination aus Volltextsuche und KI-generierten Erklärungen (Claude oder Ollama) reduziert die Fehlersuche von Stunden auf Minuten.
+LogLens ist ein plattformübergreifendes Entwicklerwerkzeug, das **Logs aus beliebigen Quellen sammelt, normalisiert, clustert und erklärt**; lokale Dateien, Docker-Container und Systemlogs. Die Kombination aus Volltextsuche und KI-generierten Erklärungen (Claude oder Ollama) reduziert die Fehlersuche von Stunden auf Minuten.
 
 ## Funktionen
 
 | Modul | Beschreibung |
 |---|---|
 | **Multi-Source-Collector** | Dateien, Verzeichnisse (Glob), Docker-Container & Services, macOS Unified Logging, journald, Windows EventLog, stdin |
-| **Formaterkennung** | JSON, Plaintext, key=value, Nginx Combined, Docker JSON-File, Syslog — automatisch erkannt |
+| **Formaterkennung** | JSON, Plaintext, key=value, Nginx Combined, Docker JSON-File, Syslog: automatisch erkannt |
 | **Stacktrace-Zusammenführung** | Mehrzeilige Stacktraces (Rust, Java, Python, JS) werden automatisch zu einem Eintrag zusammengefasst |
 | **Fehler-Clustering** | Fingerprinting entfernt UUIDs, IPs, Zeitstempel → gruppiert ähnliche Fehler per Similarity-Matching |
 | **FTS5-Volltextsuche** | SQLite FTS5 mit Ranking, Phrasensuche und Operatoren |
-| **KI-Erklärung** | Pro Eintrag: Was ist passiert, warum, wie beheben — via Claude oder Ollama |
+| **KI-Erklärung** | Pro Eintrag: Was ist passiert, warum, wie beheben: via Claude oder Ollama |
 | **KI-Block-Zusammenfassung** | Zeitfenster zusammenfassen: Überblick, Hauptprobleme, Ursachen, Empfehlungen |
 | **Root-Cause-Analyse** | Cluster-Tiefenanalyse: Einflussfaktoren, nummerierte Fix-Schritte mit Befehlen |
-| **Timeline** | Gestapeltes Flächendiagramm für Fehler/Warnungen — Spike-Erkennung integriert |
+| **Timeline** | Gestapeltes Flächendiagramm für Fehler/Warnungen: Spike-Erkennung integriert |
 | **Export** | JSON- und Markdown-Export |
 | **CLI** | `loglens watch`, `search`, `clusters`, `analyze`, `export` |
 
@@ -97,7 +97,7 @@ LogLens
 
 Alle Einstellungen werden gespeichert unter `~/Library/Application Support/ch.raystudio.loglens/` (macOS), `~/.local/share/loglens/` (Linux) oder `%APPDATA%\loglens\` (Windows).
 
-Der Claude-API-Key wird ausschliesslich im **System-Keychain** gespeichert — niemals als Klartext.
+Der API-Key wird ausschliesslich im **System-Keychain** gespeichert, niemals als Klartext.
 
 ---
 
