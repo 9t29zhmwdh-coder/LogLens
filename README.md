@@ -16,21 +16,21 @@
 
 ## Overview
 
-LogLens is a cross-platform developer tool that **collects, normalizes, clusters and explains logs** from any source — local files, Docker containers and system logs. It combines full-text search with AI-generated explanations (local AI via Ollama) to reduce triage time from hours to minutes.
+LogLens is a cross-platform developer tool that **collects, normalizes, clusters and explains logs** from any source; local files, Docker containers and system logs. It combines full-text search with AI-generated explanations (local AI via Ollama) to reduce triage time from hours to minutes.
 
 ## Features
 
 | Module | What it does |
 |---|---|
 | **Multi-source collector** | Files, directories (glob), Docker containers & services, macOS Unified Logging, journald, Windows EventLog, stdin |
-| **Format detection** | JSON, plaintext, key=value, Nginx combined, Docker JSON-file, syslog — auto-detected |
+| **Format detection** | JSON, plaintext, key=value, Nginx combined, Docker JSON-file, syslog: auto-detected |
 | **Stacktrace merging** | Multi-line stacktraces (Rust, Java, Python, JS) are automatically combined into a single entry |
 | **Error clustering** | Fingerprinting strips UUIDs, IPs, timestamps → groups similar errors with similarity matching |
 | **FTS5 full-text search** | SQLite FTS5 with ranked search, phrase queries and operator support |
-| **AI explain** | Per-entry explanation: what happened, why, how to fix — powered by local AI (Ollama) |
+| **AI explain** | Per-entry explanation: what happened, why, how to fix: powered by local AI (Ollama) |
 | **AI block summary** | Summarize a time window: overview, key issues, root causes, recommendations |
 | **Root-cause analysis** | Cluster-level deep dive: contributing factors, numbered fix steps with commands |
-| **Timeline** | Stacked area chart of errors/warnings per minute — spike detection built in |
+| **Timeline** | Stacked area chart of errors/warnings per minute: spike detection built in |
 | **Export** | JSON and Markdown export |
 | **CLI** | `loglens watch`, `search`, `clusters`, `analyze`, `export` |
 
@@ -96,7 +96,7 @@ LogLens
 
 All settings are stored in `~/.local/share/loglens/` (Linux), `~/Library/Application Support/ch.raystudio.loglens/` (macOS) or `%APPDATA%\loglens\` (Windows).
 
-AI credentials are stored in the **system keychain** — never in plain text files.
+AI credentials are stored in the **system keychain**, never in plain text files.
 
 ---
 
