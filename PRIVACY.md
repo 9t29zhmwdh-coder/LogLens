@@ -1,10 +1,10 @@
-# Privacy Policy — LogLens
+# Privacy Policy : LogLens
 
 ## Summary
 
 LogLens processes all data locally. No data ever leaves your device.
 
-## What We Collect
+## What I Collect
 
 **Nothing.** LogLens does not collect, store, transmit, or share any user data.
 
