@@ -97,4 +97,4 @@ AI credentials are stored in the **system keychain**, never in plain text files.
 
 ---
 
-**Author:** [Rafael Yilmaz](https://github.com/9t29zhmwdh-coder) · **Status:** Active · ![version](https://img.shields.io/github/v/release/9t29zhmwdh-coder/LogLens?label=\&color=6b7280\&style=flat-square) · **License:** MIT
+**Author:** [Rafael Yilmaz](https://github.com/9t29zhmwdh-coder) · **Status:** Active · ![version](https://img.shields.io/github/v/release/9t29zhmwdh-coder/LogLens?color=6b7280&style=flat-square) · **License:** MIT
