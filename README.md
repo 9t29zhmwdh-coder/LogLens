@@ -37,19 +37,19 @@ LogLens is a cross-platform developer tool that **collects, normalizes, clusters
 # Desktop app
 cargo tauri dev
 
-# CLI — tail a file
+# CLI: tail a file
 loglens watch /var/log/app.log --level warn
 
-# CLI — tail Docker container + AI explain
+# CLI: tail Docker container + AI explain
 loglens watch docker://my-api --ai
 
-# CLI — search
+# CLI: search
 loglens search "connection refused"
 
-# CLI — show top error clusters
+# CLI: show top error clusters
 loglens clusters --top 20
 
-# CLI — AI root-cause on a cluster
+# CLI: AI root-cause on a cluster
 loglens analyze <cluster-id>
 
 # Set API key (stored in system keychain)
@@ -60,18 +60,18 @@ loglens config set-key sk-ant-...
 
 ```
 LogLens
-├── crates/ll-core/          — Core library
-│   ├── collector/           — File, Docker, system log collectors
-│   ├── normalizer/          — Format detection + line → NormalizedEntry
-│   ├── clustering/          — Fingerprinting + similarity grouper
-│   ├── query/               — FTS5 query engine + AI natural-language translation
-│   ├── timeline/            — Spike detection + service correlation
-│   ├── ai/                  — local AI backends (Ollama) (explain / summarize / root-cause)
-│   ├── export/              — JSON + Markdown export
-│   └── db/                  — SQLite with FTS5 migrations
-├── crates/ll-cli/           — CLI binary
-├── src-tauri/               — Tauri backend + IPC commands
-└── frontend/                — React + TypeScript + Recharts dashboard
+├── crates/ll-core/          # Core library
+│   ├── collector/           # File, Docker, system log collectors
+│   ├── normalizer/          # Format detection + line → NormalizedEntry
+│   ├── clustering/          # Fingerprinting + similarity grouper
+│   ├── query/               # FTS5 query engine + AI natural-language translation
+│   ├── timeline/            # Spike detection + service correlation
+│   ├── ai/                  # local AI backends (Ollama) (explain / summarize / root-cause)
+│   ├── export/              # JSON + Markdown export
+│   └── db/                  # SQLite with FTS5 migrations
+├── crates/ll-cli/           # CLI binary
+├── src-tauri/               # Tauri backend + IPC commands
+└── frontend/                # React + TypeScript + Recharts dashboard
 ```
 
 ## Tech Stack
