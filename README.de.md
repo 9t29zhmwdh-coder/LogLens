@@ -39,19 +39,19 @@ LogLens ist ein plattformübergreifendes Entwicklerwerkzeug, das **Logs aus beli
 # Desktop-App
 cargo tauri dev
 
-# CLI — Datei beobachten
+# CLI: Datei beobachten
 loglens watch /var/log/app.log --level warn
 
-# CLI — Docker-Container + KI-Erklärung
+# CLI: Docker-Container + KI-Erklärung
 loglens watch docker://my-api --ai
 
-# CLI — Suche
+# CLI: Suche
 loglens search "connection refused"
 
-# CLI — Top-Fehler-Cluster anzeigen
+# CLI: Top-Fehler-Cluster anzeigen
 loglens clusters --top 20
 
-# CLI — KI Root-Cause für einen Cluster
+# CLI: KI Root-Cause für einen Cluster
 loglens analyze <cluster-id>
 
 # API-Key setzen (in System-Keychain gespeichert)
@@ -62,18 +62,18 @@ loglens config set-key sk-ant-...
 
 ```
 LogLens
-├── crates/ll-core/          — Kernbibliothek
-│   ├── collector/           — Datei-, Docker- und Systemlog-Collector
-│   ├── normalizer/          — Formaterkennung + Zeile → NormalizedEntry
-│   ├── clustering/          — Fingerprinting + Similarity-Grouper
-│   ├── query/               — FTS5-Query-Engine + KI-Übersetzung
-│   ├── timeline/            — Spike-Erkennung + Service-Korrelation
-│   ├── ai/                  — Claude + Ollama (erklären / zusammenfassen / Root-Cause)
-│   ├── export/              — JSON + Markdown Export
-│   └── db/                  — SQLite mit FTS5-Migrationen
-├── crates/ll-cli/           — CLI-Binary
-├── src-tauri/               — Tauri-Backend + IPC-Commands
-└── frontend/                — React + TypeScript + Recharts Dashboard
+├── crates/ll-core/          # Kernbibliothek
+│   ├── collector/           # Datei-, Docker- und Systemlog-Collector
+│   ├── normalizer/          # Formaterkennung + Zeile → NormalizedEntry
+│   ├── clustering/          # Fingerprinting + Similarity-Grouper
+│   ├── query/               # FTS5-Query-Engine + KI-Übersetzung
+│   ├── timeline/            # Spike-Erkennung + Service-Korrelation
+│   ├── ai/                  # Claude + Ollama (erklären / zusammenfassen / Root-Cause)
+│   ├── export/              # JSON + Markdown Export
+│   └── db/                  # SQLite mit FTS5-Migrationen
+├── crates/ll-cli/           # CLI-Binary
+├── src-tauri/               # Tauri-Backend + IPC-Commands
+└── frontend/                # React + TypeScript + Recharts Dashboard
 ```
 
 ## Tech-Stack
