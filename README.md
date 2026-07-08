@@ -7,13 +7,21 @@
 
 **AI-powered log analysis · Real-time search · Error clustering · Root-cause reports**
 
-[![CI](https://github.com/9t29zhmwdh-coder/LogLens/actions/workflows/ci.yml/badge.svg)](https://github.com/9t29zhmwdh-coder/LogLens/actions) ![Platform](https://img.shields.io/badge/Platform-macOS_%7C_Windows_%7C_Ubuntu-lightgrey) ![Rust](https://img.shields.io/badge/Rust-CE422B?logo=rust&logoColor=white) ![AI | Claude Code](https://img.shields.io/badge/AI-Claude_Code-black?logo=anthropic&logoColor=white) ![AI | Copilot](https://img.shields.io/badge/AI-Copilot-black?logo=github&logoColor=white) ![AI | Ollama](https://img.shields.io/badge/AI-Ollama-black?logo=ollama&logoColor=white)
+[![CI](https://github.com/9t29zhmwdh-coder/LogLens/actions/workflows/ci.yml/badge.svg)](https://github.com/9t29zhmwdh-coder/LogLens/actions) ![Platform](https://img.shields.io/badge/Platform-macOS_%7C_Windows_%7C_Ubuntu-lightgrey) ![Rust](https://img.shields.io/badge/Rust-CE422B?logo=rust&logoColor=white) ![AI | Claude Code](https://img.shields.io/badge/AI-Claude_Code-black?logo=anthropic&logoColor=white) ![AI | Copilot](https://img.shields.io/badge/AI-Copilot-black?logo=github&logoColor=white) ![AI | Claude](https://img.shields.io/badge/AI-Claude-black?logo=anthropic&logoColor=white) ![AI | Ollama](https://img.shields.io/badge/AI-Ollama-black?logo=ollama&logoColor=white)
+
+> **How it runs:** LogLens is a native desktop app, not a server or browser tool. It opens as its own window and has no tray icon or background service; it only watches sources and analyzes logs while the window is open.
+
+![LogLens](docs/screenshot.png)
 
 ---
 
+LogLens's UI is available in English (default) and German; switch anytime with the language toggle.
+
+**In practice:** you point LogLens at a log file or Docker container, it clusters recurring errors by fingerprint so you see 1 entry instead of 500 duplicates, and on request asks Claude (default) or a local Ollama model to explain the root cause with concrete fix steps.
+
 ## Overview
 
-LogLens is a cross-platform developer tool that **collects, normalizes, clusters and explains logs** from any source; local files, Docker containers and system logs. It combines full-text search with AI-generated explanations (local AI via Ollama) to reduce triage time from hours to minutes.
+LogLens is a cross-platform developer tool that **collects, normalizes, clusters and explains logs** from any source; local files, Docker containers and system logs. It combines full-text search with AI-generated explanations (Claude by default, or a local Ollama model) to reduce triage time from hours to minutes.
 
 ## Features
 
@@ -24,7 +32,7 @@ LogLens is a cross-platform developer tool that **collects, normalizes, clusters
 | **Stacktrace merging** | Multi-line stacktraces (Rust, Java, Python, JS) are automatically combined into a single entry |
 | **Error clustering** | Fingerprinting strips UUIDs, IPs, timestamps → groups similar errors with similarity matching |
 | **FTS5 full-text search** | SQLite FTS5 with ranked search, phrase queries and operator support |
-| **AI explain** | Per-entry explanation: what happened, why, how to fix: powered by local AI (Ollama) |
+| **AI explain** | Per-entry explanation: what happened, why, how to fix: powered by Claude (default) or Ollama |
 | **AI block summary** | Summarize a time window: overview, key issues, root causes, recommendations |
 | **Root-cause analysis** | Cluster-level deep dive: contributing factors, numbered fix steps with commands |
 | **Timeline** | Stacked area chart of errors/warnings per minute: spike detection built in |
@@ -66,7 +74,7 @@ LogLens
 │   ├── clustering/          # Fingerprinting + similarity grouper
 │   ├── query/               # FTS5 query engine + AI natural-language translation
 │   ├── timeline/            # Spike detection + service correlation
-│   ├── ai/                  # local AI backends (Ollama) (explain / summarize / root-cause)
+│   ├── ai/                  # Claude + Ollama backends (explain / summarize / root-cause)
 │   ├── export/              # JSON + Markdown export
 │   └── db/                  # SQLite with FTS5 migrations
 ├── crates/ll-cli/           # CLI binary
@@ -86,7 +94,7 @@ LogLens
 | File watching | notify + notify-debouncer-full |
 | Docker | bollard |
 | Clustering | sha2 fingerprinting + strsim similarity |
-| AI | Ollama (local AI) |
+| AI | Claude (Anthropic API, default) or Ollama (local) |
 | API keys | System keychain (keyring) |
 
 ## Configuration
@@ -94,6 +102,14 @@ LogLens
 All settings are stored in `~/.local/share/loglens/` (Linux), `~/Library/Application Support/ch.raystudio.loglens/` (macOS) or `%APPDATA%\loglens\` (Windows).
 
 AI credentials are stored in the **system keychain**, never in plain text files.
+
+## Uninstall / Cleanup
+
+- Delete the app bundle
+- Remove the data directory listed under Configuration above (`loglens.db` and settings)
+- Remove the stored API key from Keychain Access.app (search for "loglens" or "LogLens")
+
+No other files or background services are left behind.
 
 ---
 
