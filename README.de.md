@@ -5,13 +5,21 @@
 
 **KI-gestützte Log-Analyse · Echtzeit-Suche · Fehler-Clustering · Root-Cause-Berichte**
 
-[![CI](https://github.com/9t29zhmwdh-coder/LogLens/actions/workflows/ci.yml/badge.svg)](https://github.com/9t29zhmwdh-coder/LogLens/actions) ![Platform](https://img.shields.io/badge/Platform-macOS_%7C_Windows_%7C_Ubuntu-lightgrey) ![Rust](https://img.shields.io/badge/Rust-CE422B?logo=rust&logoColor=white) ![AI | Claude Code](https://img.shields.io/badge/AI-Claude_Code-black?logo=anthropic&logoColor=white) ![AI | Copilot](https://img.shields.io/badge/AI-Copilot-black?logo=github&logoColor=white) ![AI | Ollama](https://img.shields.io/badge/AI-Ollama-black?logo=ollama&logoColor=white)
+[![CI](https://github.com/9t29zhmwdh-coder/LogLens/actions/workflows/ci.yml/badge.svg)](https://github.com/9t29zhmwdh-coder/LogLens/actions) ![Platform](https://img.shields.io/badge/Platform-macOS_%7C_Windows_%7C_Ubuntu-lightgrey) ![Rust](https://img.shields.io/badge/Rust-CE422B?logo=rust&logoColor=white) ![AI | Claude Code](https://img.shields.io/badge/AI-Claude_Code-black?logo=anthropic&logoColor=white) ![AI | Copilot](https://img.shields.io/badge/AI-Copilot-black?logo=github&logoColor=white) ![AI | Claude](https://img.shields.io/badge/AI-Claude-black?logo=anthropic&logoColor=white) ![AI | Ollama](https://img.shields.io/badge/AI-Ollama-black?logo=ollama&logoColor=white)
 
 [🇬🇧 English](README.md)
 
 </div>
 
+> **So läuft es:** LogLens ist eine native Desktop-App, kein Server oder Browser-Tool. Sie öffnet sich als eigenes Fenster, ohne Tray-Icon oder Hintergrunddienst; sie überwacht Quellen und analysiert Logs nur, während das Fenster geöffnet ist.
+
+![LogLens](docs/screenshot.de.png)
+
 ---
+
+Die Oberfläche von LogLens ist auf Englisch (Standard) und Deutsch verfügbar, umschaltbar über den Sprachtoggle.
+
+**In der Praxis:** du zeigst LogLens auf eine Logdatei oder einen Docker-Container, es clustert wiederkehrende Fehler per Fingerprint, sodass du 1 Eintrag statt 500 Duplikaten siehst, und lässt auf Wunsch Claude (Standard) oder ein lokales Ollama-Modell die Ursache mit konkreten Lösungsschritten erklären.
 
 ## Übersicht
 
@@ -96,6 +104,14 @@ LogLens
 Alle Einstellungen werden gespeichert unter `~/Library/Application Support/ch.raystudio.loglens/` (macOS), `~/.local/share/loglens/` (Linux) oder `%APPDATA%\loglens\` (Windows).
 
 Der API-Key wird ausschliesslich im **System-Keychain** gespeichert, niemals als Klartext.
+
+## Deinstallation / Aufräumen
+
+- App-Bundle löschen
+- Das oben genannte Datenverzeichnis entfernen (`loglens.db` und Einstellungen)
+- Gespeicherten API-Key aus der Schlüsselbundverwaltung.app entfernen (suche nach "loglens" oder "LogLens")
+
+Es bleiben keine weiteren Dateien oder Hintergrunddienste zurück.
 
 ---
 
