@@ -20,7 +20,6 @@ fn main() {
         .init();
 
     tauri::Builder::default()
-        .plugin(tauri_plugin_shell::init())
         .setup(|app| {
             let app_handle = app.handle().clone();
 
@@ -28,11 +27,10 @@ fn main() {
             std::fs::create_dir_all(&data_dir).unwrap();
             let db_path = data_dir.join("loglens.db");
 
-            let rt = tokio::runtime::Handle::current();
-            let pool = rt.block_on(ll_core::db::open(&db_path)).unwrap();
+            let pool = tauri::async_runtime::block_on(ll_core::db::open(&db_path)).unwrap();
 
             // Load settings from DB or use defaults
-            let settings_json = rt.block_on(ll_core::db::queries::get_setting(&pool, "app_settings"))
+            let settings_json = tauri::async_runtime::block_on(ll_core::db::queries::get_setting(&pool, "app_settings"))
                 .unwrap_or(None);
             let settings: AppSettings = settings_json
                 .and_then(|s| serde_json::from_str(&s).ok())
@@ -43,12 +41,12 @@ fn main() {
             let collector = Arc::new(LogCollector::new(log_tx.clone(), grouper.clone()));
 
             // Restore previously configured sources
-            let saved_sources = rt.block_on(ll_core::db::queries::list_sources(&pool)).unwrap_or_default();
+            let saved_sources = tauri::async_runtime::block_on(ll_core::db::queries::list_sources(&pool)).unwrap_or_default();
             for src in saved_sources {
                 if src.enabled {
                     let c = collector.clone();
                     let s = src.clone();
-                    rt.spawn(async move {
+                    tauri::async_runtime::spawn(async move {
                         if let Err(e) = c.watch(s).await {
                             tracing::warn!("Failed to restore source: {}", e);
                         }
@@ -60,8 +58,8 @@ fn main() {
             let pool2 = pool.clone();
             let grouper2 = grouper.clone();
             let ah = app_handle.clone();
-            rt.spawn(async move {
-                while let Some(mut entry) = log_rx.recv().await {
+            tauri::async_runtime::spawn(async move {
+                while let Some(entry) = log_rx.recv().await {
                     // Persist
                     if let Err(e) = ll_core::db::queries::insert_entry(&pool2, &entry).await {
                         tracing::warn!("DB insert failed: {}", e);
@@ -80,7 +78,6 @@ fn main() {
                 collector,
                 grouper,
                 settings: Arc::new(RwLock::new(settings)),
-                log_tx,
             };
 
             app.manage(state);

@@ -1,40 +1,42 @@
 import { useState } from 'react'
 import { useSettingsStore } from '../stores/settingsStore'
 import { api } from '../lib/tauri'
+import { useT } from '../lib/i18n'
 
 export default function SettingsView() {
   const { settings, setSettings, hasKey, setHasKey } = useSettingsStore()
   const [apiKey, setApiKey] = useState('')
   const [status, setStatus] = useState('')
   const [testing, setTesting] = useState(false)
+  const t = useT()
 
   const saveKey = async () => {
     if (!apiKey.trim()) return
     await api.saveApiKey(apiKey.trim())
     setApiKey('')
     setHasKey(true)
-    setStatus('API key saved')
+    setStatus(t('settings.apiKeySaved'))
   }
 
   const testBackend = async () => {
     setTesting(true)
     const ok = await api.checkAiBackend()
-    setStatus(ok ? 'AI backend reachable ✓' : 'AI backend not reachable ✗')
+    setStatus(ok ? `${t('settings.backendReachable')} ✓` : `${t('settings.backendUnreachable')} ✗`)
     setTesting(false)
   }
 
   const save = async () => {
     await api.saveSettings(settings)
-    setStatus('Settings saved')
+    setStatus(t('settings.settingsSaved'))
   }
 
   return (
     <div className="p-6 max-w-xl space-y-6">
-      <h2 className="text-lg font-semibold text-ll-accent">Settings</h2>
+      <h2 className="text-lg font-semibold text-ll-accent">{t('settings.title')}</h2>
 
       {/* AI Backend */}
       <section className="bg-ll-surface border border-ll-border rounded-lg p-4 space-y-4">
-        <div className="text-sm font-semibold text-gray-300">AI Backend</div>
+        <div className="text-sm font-semibold text-gray-300">{t('settings.aiBackend')}</div>
         <div className="flex gap-3">
           {['claude', 'ollama'].map(b => (
             <button
@@ -53,7 +55,7 @@ export default function SettingsView() {
         {settings.ai_backend === 'claude' && (
           <div className="space-y-2">
             <div className="text-xs text-ll-muted">
-              Claude API Key {hasKey ? '· ✓ Set' : '· Not configured'}
+              Claude API Key {hasKey ? `· ✓ ${t('settings.apiKeySet')}` : `· ${t('settings.apiKeyNotConfigured')}`}
             </div>
             <div className="flex gap-2">
               <input
@@ -65,7 +67,7 @@ export default function SettingsView() {
               />
               <button onClick={saveKey}
                 className="px-4 py-1.5 bg-ll-accent/20 text-ll-accent rounded hover:bg-ll-accent/30 text-sm transition-colors">
-                Save
+                {t('settings.save')}
               </button>
             </div>
           </div>
@@ -90,13 +92,13 @@ export default function SettingsView() {
 
         <button onClick={testBackend} disabled={testing}
           className="text-xs text-ll-muted hover:text-gray-200 transition-colors">
-          {testing ? 'Testing...' : 'Test connection'}
+          {testing ? t('settings.testing') : t('settings.testConnection')}
         </button>
       </section>
 
       {/* General */}
       <section className="bg-ll-surface border border-ll-border rounded-lg p-4 space-y-4">
-        <div className="text-sm font-semibold text-gray-300">General</div>
+        <div className="text-sm font-semibold text-gray-300">{t('settings.general')}</div>
         <label className="flex items-center gap-3 cursor-pointer">
           <input
             type="checkbox"
@@ -104,10 +106,10 @@ export default function SettingsView() {
             onChange={e => setSettings({ ...settings, auto_cluster: e.target.checked })}
             className="w-4 h-4 accent-ll-accent"
           />
-          <span className="text-sm text-gray-200">Auto-cluster similar errors</span>
+          <span className="text-sm text-gray-200">{t('settings.autoCluster')}</span>
         </label>
         <div>
-          <div className="text-xs text-ll-muted mb-1">Max entries in memory</div>
+          <div className="text-xs text-ll-muted mb-1">{t('settings.maxEntries')}</div>
           <input
             type="number"
             min={1000} max={50000} step={1000}
@@ -121,7 +123,7 @@ export default function SettingsView() {
       <div className="flex items-center gap-4">
         <button onClick={save}
           className="px-5 py-2 bg-ll-accent text-ll-bg rounded font-medium text-sm hover:opacity-90 transition-opacity">
-          Save Settings
+          {t('settings.saveSettings')}
         </button>
         {status && <span className="text-xs text-green-400">{status}</span>}
       </div>
