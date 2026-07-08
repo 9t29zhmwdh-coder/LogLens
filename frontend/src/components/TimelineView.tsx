@@ -1,12 +1,14 @@
 import { useEffect, useState } from 'react'
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts'
 import { api } from '../lib/tauri'
+import { useT } from '../lib/i18n'
 import type { TimelineBucket } from '../lib/tauri'
 import { subHours, format } from 'date-fns'
 
 export default function TimelineView() {
   const [buckets, setBuckets] = useState<TimelineBucket[]>([])
   const [range, setRange] = useState(6)
+  const t = useT()
 
   useEffect(() => {
     const to = new Date().toISOString()
@@ -25,7 +27,7 @@ export default function TimelineView() {
   return (
     <div className="p-6 h-full overflow-y-auto">
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-lg font-semibold text-ll-accent">Log Timeline</h2>
+        <h2 className="text-lg font-semibold text-ll-accent">{t('timeline.title')}</h2>
         <div className="flex gap-2">
           {[1, 6, 24, 72].map(h => (
             <button
@@ -41,7 +43,7 @@ export default function TimelineView() {
       </div>
 
       <div className="bg-ll-surface border border-ll-border rounded-lg p-4 mb-6">
-        <div className="text-xs text-ll-muted mb-3">Errors & Warnings per 5 min</div>
+        <div className="text-xs text-ll-muted mb-3">{t('timeline.errorsWarnings')}</div>
         <ResponsiveContainer width="100%" height={240}>
           <AreaChart data={data}>
             <CartesianGrid strokeDasharray="3 3" stroke="#30363d" />

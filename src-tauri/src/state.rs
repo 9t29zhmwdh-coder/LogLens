@@ -1,9 +1,8 @@
 use std::sync::Arc;
-use tokio::sync::{mpsc, RwLock};
+use tokio::sync::RwLock;
 use sqlx::SqlitePool;
 use ll_core::collector::LogCollector;
 use ll_core::clustering::ClusterGrouper;
-use ll_core::models::log_entry::NormalizedEntry;
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -34,5 +33,4 @@ pub struct AppState {
     pub collector: Arc<LogCollector>,
     pub grouper: Arc<ClusterGrouper>,
     pub settings: Arc<RwLock<AppSettings>>,
-    pub log_tx: mpsc::Sender<NormalizedEntry>,
 }

@@ -1,6 +1,7 @@
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef } from 'react'
 import { useLogStore } from '../stores/logStore'
 import { api } from '../lib/tauri'
+import { useT, dateLocale } from '../lib/i18n'
 import type { NormalizedEntry, AiExplanation } from '../lib/tauri'
 
 const LEVEL_COLORS: Record<string, string> = {
@@ -10,11 +11,12 @@ const LEVEL_COLORS: Record<string, string> = {
 }
 
 export default function LogsView() {
-  const { entries, filter, setFilter, selected, selectEntry } = useLogStore()
+  const { entries, filter, selected, selectEntry } = useLogStore()
   const [searchInput, setSearchInput] = useState('')
   const [aiExpl, setAiExpl] = useState<AiExplanation | null>(null)
   const [loadingAi, setLoadingAi] = useState(false)
   const bottomRef = useRef<HTMLDivElement>(null)
+  const t = useT()
 
   const filtered = entries.filter(e => {
     if (filter.levels?.length && !filter.levels.includes(e.level)) return false
@@ -44,13 +46,13 @@ export default function LogsView() {
         <div className="flex items-center gap-2 px-3 py-2 border-b border-ll-border bg-ll-surface shrink-0">
           <input
             type="text"
-            placeholder="Search logs..."
+            placeholder={t('logs.searchPlaceholder')}
             className="flex-1 bg-ll-bg border border-ll-border rounded px-3 py-1 text-sm text-gray-200 placeholder-ll-muted focus:outline-none focus:border-ll-accent"
             value={searchInput}
             onChange={e => setSearchInput(e.target.value)}
           />
           <LevelFilter />
-          <span className="text-xs text-ll-muted ml-2">{filtered.length} entries</span>
+          <span className="text-xs text-ll-muted ml-2">{filtered.length} {t('logs.entries')}</span>
         </div>
 
         {/* Entries */}
@@ -71,19 +73,19 @@ export default function LogsView() {
       {selected && (
         <div className="w-96 border-l border-ll-border bg-ll-surface flex flex-col overflow-hidden shrink-0">
           <div className="flex items-center justify-between px-3 py-2 border-b border-ll-border">
-            <span className="text-xs font-semibold text-ll-accent">Entry Detail</span>
+            <span className="text-xs font-semibold text-ll-accent">{t('logs.entryDetail')}</span>
             <button onClick={() => { selectEntry(undefined); setAiExpl(null) }}
               className="text-ll-muted hover:text-gray-200 text-lg">×</button>
           </div>
           <div className="flex-1 overflow-y-auto p-3 space-y-3 text-xs">
-            <Field label="Timestamp" value={selected.timestamp} />
-            <Field label="Level" value={selected.level} />
-            <Field label="Service" value={selected.service ?? '-'} />
-            <Field label="Source" value={selected.source_label} />
-            <Field label="Message" value={selected.message} multiline />
+            <Field label={t('logs.timestamp')} value={selected.timestamp} />
+            <Field label={t('logs.level')} value={selected.level} />
+            <Field label={t('logs.service')} value={selected.service ?? '-'} />
+            <Field label={t('logs.source')} value={selected.source_label} />
+            <Field label={t('logs.message')} value={selected.message} multiline />
             {selected.stacktrace && (
               <div>
-                <div className="text-ll-muted mb-1">Stacktrace</div>
+                <div className="text-ll-muted mb-1">{t('logs.stacktrace')}</div>
                 <pre className="text-red-300 text-[11px] whitespace-pre-wrap break-all bg-ll-bg rounded p-2">
                   {selected.stacktrace.join('\n')}
                 </pre>
@@ -92,7 +94,7 @@ export default function LogsView() {
 
             {/* AI explanation */}
             <div className="border-t border-ll-border pt-3">
-              {loadingAi && <div className="text-ll-muted animate-pulse">AI analyzing...</div>}
+              {loadingAi && <div className="text-ll-muted animate-pulse">{t('logs.aiAnalyzing')}</div>}
               {aiExpl && <AiPanel expl={aiExpl} />}
             </div>
           </div>
@@ -112,7 +114,7 @@ function LogLine({ entry, selected, onClick }: {
         ${selected ? 'bg-ll-accent/10' : ''}`}
     >
       <span className="text-ll-muted shrink-0 w-20">
-        {new Date(entry.timestamp).toLocaleTimeString('en', { hour12: false, fractionalSecondDigits: 3 })}
+        {new Date(entry.timestamp).toLocaleTimeString(dateLocale(), { hour12: false, fractionalSecondDigits: 3 })}
       </span>
       <span className={`shrink-0 w-12 uppercase ${LEVEL_COLORS[entry.level] ?? ''}`}>
         {entry.level}
@@ -169,22 +171,23 @@ function Field({ label, value, multiline }: { label: string; value: string; mult
 }
 
 function AiPanel({ expl }: { expl: AiExplanation }) {
+  const t = useT()
   return (
     <div className="space-y-2">
       <div className="text-ll-accent text-[11px] font-semibold">
-        AI Analysis · {Math.round(expl.confidence * 100)}% confidence
+        {t('logs.aiAnalysis')} · {Math.round(expl.confidence * 100)}% {t('logs.confidence')}
       </div>
       <div>
-        <span className="text-ll-muted">What: </span>
+        <span className="text-ll-muted">{t('logs.what')} </span>
         <span className="text-gray-200">{expl.what}</span>
       </div>
       <div>
-        <span className="text-ll-muted">Why: </span>
+        <span className="text-ll-muted">{t('logs.why')} </span>
         <span className="text-gray-200">{expl.why}</span>
       </div>
       {expl.fix_suggestions.length > 0 && (
         <div>
-          <div className="text-ll-muted mb-1">Fix suggestions</div>
+          <div className="text-ll-muted mb-1">{t('logs.fixSuggestions')}</div>
           <ul className="space-y-0.5">
             {expl.fix_suggestions.map((s, i) => (
               <li key={i} className="text-green-400">→ {s}</li>

@@ -20,7 +20,7 @@ futures-util  = { workspace = true }
 notify                = "6"
 notify-debouncer-full = "0.3"
 bollard               = "0.18"
-sqlx = { version = "0.8", features = ["sqlite", "runtime-tokio", "chrono", "uuid", "migrate", "macros"] }
+sqlx = { workspace = true }
 regex           = "1"
 once_cell       = "1"
 dashmap         = "6"

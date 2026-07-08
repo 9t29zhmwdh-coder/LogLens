@@ -3,6 +3,7 @@ import { api, events } from './lib/tauri'
 import { useLogStore } from './stores/logStore'
 import { useClusterStore } from './stores/clusterStore'
 import { useSettingsStore } from './stores/settingsStore'
+import { useT, useLangStore } from './lib/i18n'
 import LogsView from './components/LogsView'
 import ClustersView from './components/ClustersView'
 import TimelineView from './components/TimelineView'
@@ -16,6 +17,8 @@ export default function App() {
   const addEntry = useLogStore(s => s.addEntry)
   const setClusters = useClusterStore(s => s.setClusters)
   const { setSettings, setHasKey } = useSettingsStore()
+  const t = useT()
+  const { lang, toggle } = useLangStore()
 
   useEffect(() => {
     api.getSettings().then(setSettings)
@@ -31,11 +34,11 @@ export default function App() {
   }, [])
 
   const nav: { id: View; label: string; icon: string }[] = [
-    { id: 'logs',     label: 'Logs',     icon: '≡' },
-    { id: 'clusters', label: 'Clusters', icon: '⬡' },
-    { id: 'timeline', label: 'Timeline', icon: '⌛' },
-    { id: 'sources',  label: 'Sources',  icon: '⊕' },
-    { id: 'settings', label: 'Settings', icon: '⚙' },
+    { id: 'logs',     label: t('nav.logs'),     icon: '≡' },
+    { id: 'clusters', label: t('nav.clusters'), icon: '⬡' },
+    { id: 'timeline', label: t('nav.timeline'), icon: '⌛' },
+    { id: 'sources',  label: t('nav.sources'),  icon: '⊕' },
+    { id: 'settings', label: t('nav.settings'), icon: '⚙' },
   ]
 
   return (
@@ -56,6 +59,12 @@ export default function App() {
             {n.icon}
           </button>
         ))}
+        <button
+          onClick={toggle}
+          className="mt-auto w-10 h-8 flex items-center justify-center rounded text-[10px] text-ll-muted hover:text-gray-200 hover:bg-white/5 transition-colors border border-ll-border"
+        >
+          {lang === 'en' ? 'DE' : 'EN'}
+        </button>
       </nav>
 
       {/* Main content */}
