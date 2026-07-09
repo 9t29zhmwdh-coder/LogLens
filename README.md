@@ -39,6 +39,16 @@ LogLens is a cross-platform developer tool that **collects, normalizes, clusters
 | **Export** | JSON and Markdown export |
 | **CLI** | `loglens watch`, `search`, `clusters`, `analyze`, `export` |
 
+## Requirements
+
+- **Rust** (stable toolchain) — install via [rustup](https://rustup.rs)
+- **Node.js 20** (LTS recommended) with npm — for building the `frontend/` (React + TypeScript) UI
+- **Tauri CLI** (`cargo tauri`) — install with `cargo install tauri-cli`, required to run/build the desktop app
+- A supported OS: macOS, Windows or Ubuntu/Linux (see the CI badge above)
+- The `loglens` CLI binary (`crates/ll-cli`) is built with plain `cargo build`/`cargo install` and has no Node/Tauri dependency
+
+> 🌱 New here? → [Step-by-step guide for beginners](GETTING_STARTED.md)
+
 ## Quick Start
 
 ```bash
