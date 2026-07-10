@@ -17,6 +17,10 @@
 
 ---
 
+> 🌱 Neu hier? → [Schritt-für-Schritt-Anleitung für Einsteiger](GETTING_STARTED.md)
+
+---
+
 Die Oberfläche von LogLens ist auf Englisch (Standard) und Deutsch verfügbar, umschaltbar über den Sprachtoggle.
 
 **In der Praxis:** du zeigst LogLens auf eine Logdatei oder einen Docker-Container, es clustert wiederkehrende Fehler per Fingerprint, sodass du 1 Eintrag statt 500 Duplikaten siehst, und lässt auf Wunsch Claude (Standard) oder ein lokales Ollama-Modell die Ursache mit konkreten Lösungsschritten erklären.
