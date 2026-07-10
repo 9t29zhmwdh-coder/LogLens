@@ -5,6 +5,12 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [0.2.0] - 2026-07-10
+
+### Added
+
+- Release workflow: pushing a `v*` tag now builds macOS (DMG), Windows (NSIS installer) and Linux (deb + AppImage) bundles via `tauri-action` and attaches them to a GitHub Release. Not code-signed/notarized
+
 ## [0.1.3] - 2026-07-10
 
 ### Fixed
