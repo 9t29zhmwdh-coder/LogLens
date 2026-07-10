@@ -15,6 +15,10 @@
 
 ---
 
+> 🌱 New here? → [Step-by-step guide for beginners](GETTING_STARTED.md)
+
+---
+
 LogLens's UI is available in English (default) and German; switch anytime with the language toggle.
 
 **In practice:** you point LogLens at a log file or Docker container, it clusters recurring errors by fingerprint so you see 1 entry instead of 500 duplicates, and on request asks Claude (default) or a local Ollama model to explain the root cause with concrete fix steps.
@@ -46,8 +50,6 @@ LogLens is a cross-platform developer tool that **collects, normalizes, clusters
 - **Tauri CLI** (`cargo tauri`) — install with `cargo install tauri-cli`, required to run/build the desktop app
 - A supported OS: macOS, Windows or Ubuntu/Linux (see the CI badge above)
 - The `loglens` CLI binary (`crates/ll-cli`) is built with plain `cargo build`/`cargo install` and has no Node/Tauri dependency
-
-> 🌱 New here? → [Step-by-step guide for beginners](GETTING_STARTED.md)
 
 ## Quick Start
 
