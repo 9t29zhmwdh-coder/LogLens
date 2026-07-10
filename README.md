@@ -15,7 +15,7 @@
 
 ---
 
-> 💾 **Download:** [macOS (DMG)](https://github.com/9t29zhmwdh-coder/LogLens/releases/latest/download/LogLens.dmg) · [Windows (Installer)](https://github.com/9t29zhmwdh-coder/LogLens/releases/latest/download/LogLens-Setup.exe) · [Linux (AppImage)](https://github.com/9t29zhmwdh-coder/LogLens/releases/latest/download/LogLens.AppImage) — always the latest release, not code-signed/notarized (Gatekeeper/SmartScreen will warn on first run). .deb/.rpm packages also available on the [Releases page](https://github.com/9t29zhmwdh-coder/LogLens/releases). Or build from source, see Getting Started below.
+> 💾 **Download:** [macOS (DMG)](https://github.com/9t29zhmwdh-coder/LogLens/releases/latest/download/LogLens.dmg) · [Windows (Installer)](https://github.com/9t29zhmwdh-coder/LogLens/releases/latest/download/LogLens-Setup.exe) · [Linux (AppImage)](https://github.com/9t29zhmwdh-coder/LogLens/releases/latest/download/LogLens.AppImage): always the latest release, not code-signed/notarized (Gatekeeper/SmartScreen will warn on first run). .deb/.rpm packages also available on the [Releases page](https://github.com/9t29zhmwdh-coder/LogLens/releases). Or build from source, see Getting Started below.
 
 ---
 
@@ -49,9 +49,9 @@ LogLens is a cross-platform developer tool that **collects, normalizes, clusters
 
 ## Requirements
 
-- **Rust** (stable toolchain) — install via [rustup](https://rustup.rs)
-- **Node.js 20** (LTS recommended) with npm — for building the `frontend/` (React + TypeScript) UI
-- **Tauri CLI** (`cargo tauri`) — install with `cargo install tauri-cli`, required to run/build the desktop app
+- **Rust** (stable toolchain): install via [rustup](https://rustup.rs)
+- **Node.js 20** (LTS recommended) with npm: for building the `frontend/` (React + TypeScript) UI
+- **Tauri CLI** (`cargo tauri`): install with `cargo install tauri-cli`, required to run/build the desktop app
 - A supported OS: macOS, Windows or Ubuntu/Linux (see the CI badge above)
 - The `loglens` CLI binary (`crates/ll-cli`) is built with plain `cargo build`/`cargo install` and has no Node/Tauri dependency
 

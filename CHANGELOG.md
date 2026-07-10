@@ -5,6 +5,12 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [0.2.1] - 2026-07-10
+
+### Fixed
+
+- Removed em-dashes from README.md/README.de.md, replaced with colons
+
 ## [0.2.0] - 2026-07-10
 
 ### Added
