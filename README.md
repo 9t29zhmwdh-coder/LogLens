@@ -15,6 +15,10 @@
 
 ---
 
+> 💾 **Download:** [macOS (DMG)](https://github.com/9t29zhmwdh-coder/LogLens/releases/latest/download/LogLens.dmg) · [Windows (Installer)](https://github.com/9t29zhmwdh-coder/LogLens/releases/latest/download/LogLens-Setup.exe) · [Linux (AppImage)](https://github.com/9t29zhmwdh-coder/LogLens/releases/latest/download/LogLens.AppImage) — always the latest release, not code-signed/notarized (Gatekeeper/SmartScreen will warn on first run). .deb/.rpm packages also available on the [Releases page](https://github.com/9t29zhmwdh-coder/LogLens/releases). Or build from source, see Getting Started below.
+
+---
+
 > 🌱 New here? → [Step-by-step guide for beginners](GETTING_STARTED.md)
 
 ---
