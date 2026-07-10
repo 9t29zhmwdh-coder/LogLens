@@ -5,6 +5,12 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [0.1.3] - 2026-07-10
+
+### Fixed
+
+- `crates/ll-cli/Cargo.toml` had a hardcoded `version = "0.1.0"` instead of inheriting `version.workspace = true` like the other crates, causing it to drift out of sync with the workspace version
+
 ## [0.1.2] - 2026-07-10
 
 ### Changed
