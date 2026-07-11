@@ -34,7 +34,7 @@ jobs:
 
       - uses: Swatinem/rust-cache@v2.9.1
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
           node-version: '20'
 
@@ -50,7 +50,7 @@ jobs:
           sqlx database create
           sqlx migrate run --source crates/ll-core/src/db/migrations
 
-      - uses: tauri-apps/tauri-action@v0
+      - uses: tauri-apps/tauri-action@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
