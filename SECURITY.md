@@ -1,4 +1,4 @@
-# Security Policy — LogLens
+# Security Policy: LogLens
 
 ## Supported Versions
 

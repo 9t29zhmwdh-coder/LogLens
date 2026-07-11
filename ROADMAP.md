@@ -1,6 +1,6 @@
-# LogLens — Roadmap
+# LogLens: Roadmap
 
-## v0.1.0 — Initial Release ✅ (2026-06-12)
+## v0.1.0, Initial Release ✅ (2026-06-12)
 
 - Real-time log file monitoring via `notify`
 - Docker container log streaming via `bollard`
@@ -14,7 +14,7 @@
 
 ---
 
-## v0.2.0 — Search & Cluster Improvements (planned)
+## v0.2.0, Search & Cluster Improvements (planned)
 
 - [ ] Saved search queries (named bookmarks)
 - [ ] Time-range picker with relative shortcuts (last 1h, 1d, 7d)
@@ -25,7 +25,7 @@
 
 ---
 
-## v0.3.0 — Parser Extensions (planned)
+## v0.3.0, Parser Extensions (planned)
 
 - [ ] Logfmt parser
 - [ ] Apache access log parser
@@ -36,7 +36,7 @@
 
 ---
 
-## v1.0.0 — Stable Release (planned)
+## v1.0.0, Stable Release (planned)
 
 - [ ] Full test coverage for ll-core (unit + integration)
 - [ ] Signed macOS / Windows / Linux binaries
@@ -44,3 +44,15 @@
 - [ ] Accessibility audit (WCAG 2.1 AA)
 - [ ] Comprehensive user documentation
 - [ ] Automated update check (offline-first, no telemetry)
+
+---
+
+## Dual-Licensing Readiness
+
+Assessed 2026-07-11 as a Dual-Licensing candidate (Community MIT + Commercial/Enterprise tier), with the same caveat as BugRadar in this portfolio: log analysis and observability is an established commercial category, but LogLens is deliberately local-first (no cloud calls except localhost Ollama, no telemetry). A conventional multi-tenant SaaS Enterprise tier would conflict with that identity. Not ready yet; blocked on:
+
+- [ ] No multi-machine or team aggregation story at all, by design: a Commercial tier here would need to stay a licensed fleet-dashboard companion (still local/on-prem) rather than a hosted rewrite
+- [ ] No custom parser/regex-template system yet (v0.3.0 item above): the most natural Community/Commercial split would be "core engine free, paid parser packs"
+- [ ] No server or API component to gate a Commercial tier against: today this is a local desktop app plus CLI with no multi-user concept
+
+Once the custom parser system (v0.3.0) lands, revisit: candidate Enterprise-only features would be paid parser packs and a licensed fleet-dashboard companion for aggregating multiple local LogLens instances, with the core collector/clustering/query engine and desktop app staying Community/MIT.
