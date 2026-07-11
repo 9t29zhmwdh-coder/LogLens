@@ -5,7 +5,13 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
-## [0.2.5] - 2026-07-11
+## [0.3.6] - 2026-07-11
+
+### Fixed
+
+- SemVer correction: v0.1.1 added a genuine new feature (full English/German UI translation, the app was previously English-only) but was versioned as a patch. Since a legitimate v0.2.0 minor (the cross-platform release workflow) already existed later in the history, the entire v0.2.x series was shifted to v0.3.x to make room: v0.1.1 through v0.1.3 became v0.2.0 through v0.2.2, and v0.2.0 through v0.2.5 became v0.3.0 through v0.3.5 (same commits, tags and releases recreated at identical SHAs), per the portfolio's SemVer discipline (patch = fix, minor = feature, major = finished product).
+
+## [0.3.5] - 2026-07-11
 
 ### Added
 
@@ -15,43 +21,43 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - Removed em-dashes from ROADMAP.md and SECURITY.md headings.
 
-## [0.2.4] - 2026-07-11
+## [0.3.4] - 2026-07-11
 
 ### Fixed
 
 - Updated actions/setup-node and tauri-apps/tauri-action to their latest major versions in CI and the release workflow, since GitHub is deprecating the Node.js 20 runtime and older action versions were being forced onto Node 24 and crashing during post-run cleanup.
 
-## [0.2.3] - 2026-07-11
+## [0.3.3] - 2026-07-11
 
 ### Fixed
 
 - Fixed the release workflow's stable-named DMG/installer/AppImage upload: it looked for the built bundle under `src-tauri/target/...`, but this is a Cargo workspace, so Cargo places build output under the workspace root `target/...`. The stable `LogLens.dmg`/`LogLens-Setup.exe`/`LogLens.AppImage` download links in README.md never actually got uploaded before this fix.
 
-## [0.2.2] - 2026-07-11
+## [0.3.2] - 2026-07-11
 
 ### Fixed
 
 - Corrected German README hero section: only the title image and title stay centered, tagline and badges are now left aligned like the English version
 
-## [0.2.1] - 2026-07-10
+## [0.3.1] - 2026-07-10
 
 ### Fixed
 
 - Removed em-dashes from README.md/README.de.md, replaced with colons
 
-## [0.2.0] - 2026-07-10
+## [0.3.0] - 2026-07-10
 
 ### Added
 
 - Release workflow: pushing a `v*` tag now builds macOS (DMG), Windows (NSIS installer) and Linux (deb + AppImage) bundles via `tauri-action` and attaches them to a GitHub Release. Not code-signed/notarized
 
-## [0.1.3] - 2026-07-10
+## [0.2.2] - 2026-07-10
 
 ### Fixed
 
 - `crates/ll-cli/Cargo.toml` had a hardcoded `version = "0.1.0"` instead of inheriting `version.workspace = true` like the other crates, causing it to drift out of sync with the workspace version
 
-## [0.1.2] - 2026-07-10
+## [0.2.1] - 2026-07-10
 
 ### Changed
 
@@ -61,7 +67,7 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - Added the "New here?" beginner guide callout to README.de.md (was missing)
 
-## [0.1.1] - 2026-07-08
+## [0.2.0] - 2026-07-08
 
 ### Fixed
 
