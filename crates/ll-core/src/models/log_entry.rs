@@ -81,7 +81,7 @@ pub struct RawLogEntry {
     pub collected_at: DateTime<Utc>,
 }
 
-/// Normalized entry — canonical representation
+/// Normalized entry: canonical representation
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct NormalizedEntry {
     pub id: String,
