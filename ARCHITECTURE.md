@@ -1,4 +1,4 @@
-# LogLens — Architecture
+# LogLens: Architecture
 
 ## Overview
 
@@ -10,8 +10,8 @@ LogLens is a Rust/Tauri v2 desktop application for AI-powered log analysis. It p
 
 ```
 src-tauri/
-├── ll-core/          # Library crate — all business logic
-└── ll-cli/           # Binary crate — Tauri shell + CLI entry point
+├── ll-core/          # Library crate: all business logic
+└── ll-cli/           # Binary crate: Tauri shell + CLI entry point
 ```
 
 ### ll-core
@@ -75,10 +75,10 @@ LogCollector (file/docker)
 React/TypeScript SPA served by Tauri v2. Communicates with the Rust backend exclusively via `invoke()` IPC calls.
 
 Key views:
-- **Search** — full-text search with filters (level, time range, source)
-- **Clusters** — error pattern groups with occurrence counts and trend sparklines
-- **Reports** — AI root-cause analysis per cluster
-- **Sources** — configure watched log files and Docker targets
+- **Search**: full-text search with filters (level, time range, source)
+- **Clusters**: error pattern groups with occurrence counts and trend sparklines
+- **Reports**: AI root-cause analysis per cluster
+- **Sources**: configure watched log files and Docker targets
 
 ---
 

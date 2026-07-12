@@ -5,6 +5,13 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [0.3.8] - 2026-07-12
+
+### Fixed
+
+- Removed em-dashes from ARCHITECTURE.md, CONTRIBUTING.md, and a source doc-comment in `crates/ll-core/src/models/log_entry.rs`. Swiss German orthography rule.
+- Removed stale scaffold bookkeeping files `SKELETON.md` and `TEMPLATE_NOTES.md`.
+
 ## [0.3.7] - 2026-07-12
 
 ### Added
