@@ -30,9 +30,14 @@
 - [ ] Logfmt parser
 - [ ] Apache access log parser
 - [ ] syslog (RFC 3164 / RFC 5424) parser
-- [ ] Custom parser via regex template (user-defined)
 - [ ] Multi-line log entry stitching (Java stack traces, Python tracebacks)
 - [ ] Source tags / labels for visual grouping
+
+---
+
+## v0.4.0, Custom Parsers (current)
+
+- [x] Custom parser via regex template (user-defined): named capture groups (`timestamp`, `level`, `service`, `message`, all optional), configured in Settings → Custom Parsers and assigned per source via `parser_hint`. A non-matching line falls back to auto-detection rather than being dropped.
 
 ---
 
@@ -52,7 +57,7 @@
 Assessed 2026-07-11 as a Dual-Licensing candidate (Community MIT + Commercial/Enterprise tier), with the same caveat as BugRadar in this portfolio: log analysis and observability is an established commercial category, but LogLens is deliberately local-first (no cloud calls except localhost Ollama, no telemetry). A conventional multi-tenant SaaS Enterprise tier would conflict with that identity. Not ready yet; blocked on:
 
 - [ ] No multi-machine or team aggregation story at all, by design: a Commercial tier here would need to stay a licensed fleet-dashboard companion (still local/on-prem) rather than a hosted rewrite
-- [ ] No custom parser/regex-template system yet (v0.3.0 item above): the most natural Community/Commercial split would be "core engine free, paid parser packs"
+- [x] ~~No custom parser/regex-template system yet~~ Shipped in v0.4.0 (see above): the most natural Community/Commercial split would be "core engine free, paid parser packs"
 - [ ] No server or API component to gate a Commercial tier against: today this is a local desktop app plus CLI with no multi-user concept
 
-Once the custom parser system (v0.3.0) lands, revisit: candidate Enterprise-only features would be paid parser packs and a licensed fleet-dashboard companion for aggregating multiple local LogLens instances, with the core collector/clustering/query engine and desktop app staying Community/MIT.
+Once the custom parser system (v0.4.0) landed, revisit: candidate Enterprise-only features would be paid parser packs and a licensed fleet-dashboard companion for aggregating multiple local LogLens instances, with the core collector/clustering/query engine, the custom parser system itself, and desktop app staying Community/MIT.

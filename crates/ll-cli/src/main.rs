@@ -119,7 +119,7 @@ async fn cmd_watch(target: &str, min_level: &str, auto_ai: bool, db_path: &std::
 
     let (tx, mut rx) = mpsc::channel(1024);
     let grouper = std::sync::Arc::new(ll_core::clustering::ClusterGrouper::new());
-    let collector = LogCollector::new(tx, grouper);
+    let collector = LogCollector::new(tx, grouper, ll_core::normalizer::CustomParserSet::default());
 
     let (source, _kind) = if let Some(container) = target.strip_prefix("docker://") {
         let name = container.to_string();

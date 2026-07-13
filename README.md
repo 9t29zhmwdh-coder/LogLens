@@ -37,6 +37,7 @@ LogLens is a cross-platform developer tool that **collects, normalizes, clusters
 |---|---|
 | **Multi-source collector** | Files, directories (glob), Docker containers & services, macOS Unified Logging, journald, Windows EventLog, stdin |
 | **Format detection** | JSON, plaintext, key=value, Nginx combined, Docker JSON-file, syslog: auto-detected |
+| **Custom parsers** | Define your own format via a regex template with named capture groups, assign it to a source in Settings → Custom Parsers |
 | **Stacktrace merging** | Multi-line stacktraces (Rust, Java, Python, JS) are automatically combined into a single entry |
 | **Error clustering** | Fingerprinting strips UUIDs, IPs, timestamps → groups similar errors with similarity matching |
 | **FTS5 full-text search** | SQLite FTS5 with ranked search, phrase queries and operator support |
@@ -118,6 +119,23 @@ LogLens
 All settings are stored in `~/.local/share/loglens/` (Linux), `~/Library/Application Support/ch.raystudio.loglens/` (macOS) or `%APPDATA%\loglens\` (Windows).
 
 AI credentials are stored in the **system keychain**, never in plain text files.
+
+## Custom Parsers
+
+When a log format doesn't match any built-in parser (JSON, key=value, Nginx, Docker, syslog), define your own in Settings → Custom Parsers: a name and a regex with named capture groups. Recognized groups (all optional):
+
+| Group | Used for | Falls back to |
+|---|---|---|
+| `timestamp` | Entry time | current time |
+| `level` | Log level (`error`, `warn`, ...) | `Unknown` |
+| `service` | Service/component name | `None` |
+| `message` | The entry text | the whole line |
+
+```
+^(?<timestamp>\S+) \[(?<level>\w+)\] (?<service>[\w-]+): (?<message>.*)$
+```
+
+matches `2026-07-13T10:00:00Z [ERROR] billing-svc: charge declined`. By default the `timestamp` group is parsed as RFC 3339; set a chrono strftime pattern (e.g. `%Y/%m/%d %H:%M:%S`) in the template's timestamp format field for other formats. Assign the parser to a source via the dropdown in Log Sources; a line that doesn't match the regex falls back to auto-detection, so a custom parser can never silently drop lines.
 
 ## Uninstall / Cleanup
 

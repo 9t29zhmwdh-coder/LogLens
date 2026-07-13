@@ -15,6 +15,7 @@ const defaults: AppSettings = {
   theme: 'dark',
   max_entries_in_memory: 5000,
   auto_cluster: true,
+  custom_parsers: [],
 }
 
 export const useSettingsStore = create<SettingsStore>((set) => ({

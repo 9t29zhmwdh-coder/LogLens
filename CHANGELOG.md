@@ -5,6 +5,13 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [0.4.0] - 2026-07-13
+
+### Added
+
+- Custom parser via regex template: define a named parser in Settings → Custom Parsers with a regex using named capture groups (`timestamp`, `level`, `service`, `message`, all optional), then assign it to a log source via the parser dropdown in Log Sources. A line that doesn't match falls back to auto-detection rather than being dropped. Closes the custom-parser blocker in this repo's Dual-Licensing Readiness assessment (ROADMAP.md); the multi-machine/fleet-aggregation blocker remains open by design.
+- `LogSource.parser_hint` (persisted since the original schema, but never read anywhere) is now actually wired into `normalize_line`.
+
 ## [0.3.8] - 2026-07-12
 
 ### Fixed

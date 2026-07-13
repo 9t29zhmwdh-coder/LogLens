@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { api } from '../lib/tauri'
 import { useT } from '../lib/i18n'
+import { useSettingsStore } from '../stores/settingsStore'
 import type { LogSource } from '../lib/tauri'
 
 export default function SourcesView() {
@@ -8,7 +9,9 @@ export default function SourcesView() {
   const [filePath, setFilePath] = useState('')
   const [fileLabel, setFileLabel] = useState('')
   const [dockerId, setDockerId] = useState('')
+  const [parserHint, setParserHint] = useState('')
   const [status, setStatus] = useState('')
+  const { settings } = useSettingsStore()
   const t = useT()
 
   const reload = () => api.listSources().then(setSources)
@@ -17,7 +20,7 @@ export default function SourcesView() {
   const addFile = async () => {
     if (!filePath.trim()) return
     try {
-      await api.watchFile(filePath.trim(), fileLabel.trim() || undefined)
+      await api.watchFile(filePath.trim(), fileLabel.trim() || undefined, parserHint || undefined)
       setFilePath(''); setFileLabel(''); setStatus(t('sources.fileSourceAdded'))
       reload()
     } catch (e) { setStatus(String(e)) }
@@ -26,7 +29,7 @@ export default function SourcesView() {
   const addDocker = async () => {
     if (!dockerId.trim()) return
     try {
-      await api.watchDocker(dockerId.trim())
+      await api.watchDocker(dockerId.trim(), undefined, parserHint || undefined)
       setDockerId(''); setStatus(t('sources.dockerSourceAdded'))
       reload()
     } catch (e) { setStatus(String(e)) }
@@ -40,6 +43,22 @@ export default function SourcesView() {
   return (
     <div className="p-6 max-w-2xl space-y-6">
       <h2 className="text-lg font-semibold text-ll-accent">{t('sources.title')}</h2>
+
+      {settings.custom_parsers.length > 0 && (
+        <div className="flex items-center gap-2 text-sm">
+          <span className="text-ll-muted">{t('sources.parser')}</span>
+          <select
+            value={parserHint}
+            onChange={e => setParserHint(e.target.value)}
+            className="bg-ll-bg border border-ll-border rounded px-2 py-1 text-sm text-gray-200 focus:outline-none focus:border-ll-accent"
+          >
+            <option value="">{t('sources.parserAuto')}</option>
+            {settings.custom_parsers.map(p => (
+              <option key={p.id} value={p.id}>{p.name}</option>
+            ))}
+          </select>
+        </div>
+      )}
 
       {/* Add file */}
       <div className="bg-ll-surface border border-ll-border rounded-lg p-4 space-y-3">
@@ -90,6 +109,11 @@ export default function SourcesView() {
             <div>
               <span className="text-gray-200">{s.label}</span>
               <span className="text-ll-muted ml-2 text-xs">{JSON.stringify(s.kind)}</span>
+              {s.parser_hint && (
+                <span className="text-ll-accent ml-2 text-xs">
+                  {settings.custom_parsers.find(p => p.id === s.parser_hint)?.name ?? s.parser_hint}
+                </span>
+              )}
             </div>
             <button onClick={() => remove(s.id)}
               className="text-red-400 hover:text-red-300 text-xs px-2">{t('sources.remove')}</button>

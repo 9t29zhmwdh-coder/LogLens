@@ -38,7 +38,8 @@ fn main() {
 
             let (log_tx, mut log_rx) = mpsc::channel::<ll_core::models::log_entry::NormalizedEntry>(4096);
             let grouper = Arc::new(ClusterGrouper::new());
-            let collector = Arc::new(LogCollector::new(log_tx.clone(), grouper.clone()));
+            let custom_parsers = ll_core::normalizer::CustomParserSet::compile(&settings.custom_parsers);
+            let collector = Arc::new(LogCollector::new(log_tx.clone(), grouper.clone(), custom_parsers));
 
             // Restore previously configured sources
             let saved_sources = tauri::async_runtime::block_on(ll_core::db::queries::list_sources(&pool)).unwrap_or_default();

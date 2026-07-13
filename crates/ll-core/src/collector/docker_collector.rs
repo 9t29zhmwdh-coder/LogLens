@@ -5,6 +5,7 @@ use bollard::container::LogsOptions;
 use futures_util::StreamExt;
 use crate::models::log_entry::{NormalizedEntry, LogSource};
 use crate::normalizer::stacktrace_detector::StacktraceAccumulator;
+use crate::normalizer::CustomParserSet;
 use crate::clustering::ClusterGrouper;
 use super::{emit_line, flush_accumulator};
 
@@ -13,6 +14,7 @@ pub async fn run_container(
     container_id: String,
     tx: mpsc::Sender<NormalizedEntry>,
     grouper: Arc<ClusterGrouper>,
+    custom_parsers: Arc<CustomParserSet>,
     mut cancel: watch::Receiver<bool>,
 ) {
     let docker = match Docker::connect_with_local_defaults() {
@@ -50,7 +52,7 @@ pub async fn run_container(
                             _ => continue,
                         };
                         if !line.is_empty() {
-                            emit_line(&line, &source, &mut accumulator, &grouper, &tx).await;
+                            emit_line(&line, &source, &mut accumulator, &grouper, &custom_parsers, &tx).await;
                         }
                     }
                     Some(Err(e)) => {
@@ -63,7 +65,7 @@ pub async fn run_container(
         }
     }
 
-    flush_accumulator(&mut accumulator, &source, &grouper, &tx).await;
+    flush_accumulator(&mut accumulator, &source, &grouper, &custom_parsers, &tx).await;
 }
 
 pub async fn run_service(
@@ -71,6 +73,7 @@ pub async fn run_service(
     service_name: String,
     tx: mpsc::Sender<NormalizedEntry>,
     grouper: Arc<ClusterGrouper>,
+    custom_parsers: Arc<CustomParserSet>,
     cancel: watch::Receiver<bool>,
 ) {
     let docker = match Docker::connect_with_local_defaults() {
@@ -102,9 +105,10 @@ pub async fn run_service(
             let src = source.clone();
             let t = tx.clone();
             let g = grouper.clone();
+            let cp = custom_parsers.clone();
             let c = cancel.clone();
             handles.push(tokio::spawn(async move {
-                run_container(src, id, t, g, c).await;
+                run_container(src, id, t, g, cp, c).await;
             }));
         }
     }

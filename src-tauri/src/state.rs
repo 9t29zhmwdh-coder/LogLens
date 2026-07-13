@@ -3,6 +3,7 @@ use tokio::sync::RwLock;
 use sqlx::SqlitePool;
 use ll_core::collector::LogCollector;
 use ll_core::clustering::ClusterGrouper;
+use ll_core::normalizer::custom_parser::CustomParserTemplate;
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -13,6 +14,8 @@ pub struct AppSettings {
     pub theme: String,
     pub max_entries_in_memory: usize,
     pub auto_cluster: bool,
+    #[serde(default)]
+    pub custom_parsers: Vec<CustomParserTemplate>,
 }
 
 impl Default for AppSettings {
@@ -24,6 +27,7 @@ impl Default for AppSettings {
             theme: "dark".to_string(),
             max_entries_in_memory: 10_000,
             auto_cluster: true,
+            custom_parsers: Vec::new(),
         }
     }
 }

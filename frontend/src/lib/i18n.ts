@@ -47,6 +47,7 @@ const translations: Record<Lang, Dict> = {
       activeSources: 'Active Sources',
       noSources: 'No sources configured.',
       remove: 'Remove',
+      parser: 'Parser:', parserAuto: 'Auto-detect',
     },
     settings: {
       title: 'Settings',
@@ -62,6 +63,10 @@ const translations: Record<Lang, Dict> = {
       saveSettings: 'Save Settings',
       settingsSaved: 'Settings saved',
       apiKeySaved: 'API key saved',
+      customParsers: 'Custom Parsers',
+      customParsersHint: 'Define a named parser via a regex with named capture groups (timestamp, level, service, message, all optional) for log formats none of the built-in parsers recognize. Assign one to a source in Log Sources.',
+      parserName: 'Parser name', timestampFormatOptional: 'Timestamp format (optional, e.g. %Y/%m/%d %H:%M:%S)',
+      addParser: 'Add Parser',
     },
   },
   de: {
@@ -102,6 +107,7 @@ const translations: Record<Lang, Dict> = {
       activeSources: 'Aktive Quellen',
       noSources: 'Keine Quellen konfiguriert.',
       remove: 'Entfernen',
+      parser: 'Parser:', parserAuto: 'Automatisch erkennen',
     },
     settings: {
       title: 'Einstellungen',
@@ -117,6 +123,10 @@ const translations: Record<Lang, Dict> = {
       saveSettings: 'Einstellungen speichern',
       settingsSaved: 'Einstellungen gespeichert',
       apiKeySaved: 'API-Key gespeichert',
+      customParsers: 'Eigene Parser',
+      customParsersHint: 'Definiere einen benannten Parser über eine Regex mit benannten Capture-Groups (timestamp, level, service, message, alle optional) für Log-Formate, die keiner der eingebauten Parser erkennt. Einer Quelle unter Log-Quellen zuweisen.',
+      parserName: 'Parser-Name', timestampFormatOptional: 'Zeitstempel-Format (optional, z. B. %Y/%m/%d %H:%M:%S)',
+      addParser: 'Parser hinzufügen',
     },
   },
 }
