@@ -139,6 +139,13 @@ export interface FixStep {
   code?: string
 }
 
+export interface CustomParserTemplate {
+  id: string
+  name: string
+  line_regex: string
+  timestamp_format?: string
+}
+
 export interface AppSettings {
   ai_backend: string
   ollama_url: string
@@ -146,6 +153,7 @@ export interface AppSettings {
   theme: string
   max_entries_in_memory: number
   auto_cluster: boolean
+  custom_parsers: CustomParserTemplate[]
 }
 
 // ── Commands ───────────────────────────────────────────────────
@@ -159,8 +167,10 @@ export const api = {
   checkAiBackend: () => invoke<boolean>('check_ai_backend'),
 
   // Collector
-  watchFile: (path: string, label?: string) => invoke<string>('watch_file', { path, label }),
-  watchDocker: (containerId: string, name?: string) => invoke<string>('watch_docker', { containerId, name }),
+  watchFile: (path: string, label?: string, parserHint?: string) =>
+    invoke<string>('watch_file', { path, label, parserHint }),
+  watchDocker: (containerId: string, name?: string, parserHint?: string) =>
+    invoke<string>('watch_docker', { containerId, name, parserHint }),
   removeSource: (sourceId: string) => invoke<void>('remove_source', { sourceId }),
   listSources: () => invoke<LogSource[]>('list_sources'),
 

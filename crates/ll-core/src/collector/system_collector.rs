@@ -4,6 +4,7 @@ use tokio::process::Command;
 use tokio::io::{AsyncBufReadExt, BufReader};
 use crate::models::log_entry::{NormalizedEntry, LogSource};
 use crate::normalizer::stacktrace_detector::StacktraceAccumulator;
+use crate::normalizer::CustomParserSet;
 use crate::clustering::ClusterGrouper;
 use super::{emit_line, flush_accumulator};
 
@@ -12,6 +13,7 @@ pub async fn run_macos(
     source: LogSource,
     tx: mpsc::Sender<NormalizedEntry>,
     grouper: Arc<ClusterGrouper>,
+    custom_parsers: Arc<CustomParserSet>,
     mut cancel: watch::Receiver<bool>,
 ) {
     #[cfg(not(target_os = "macos"))]
@@ -47,7 +49,7 @@ pub async fn run_macos(
             line = reader.next_line() => {
                 match line {
                     Ok(Some(l)) if !l.trim().is_empty() => {
-                        emit_line(&l, &source, &mut accumulator, &grouper, &tx).await;
+                        emit_line(&l, &source, &mut accumulator, &grouper, &custom_parsers, &tx).await;
                     }
                     Ok(None) | Err(_) => break,
                     _ => {}
@@ -56,7 +58,7 @@ pub async fn run_macos(
         }
     }
 
-    flush_accumulator(&mut accumulator, &source, &grouper, &tx).await;
+    flush_accumulator(&mut accumulator, &source, &grouper, &custom_parsers, &tx).await;
 }
 
 /// Linux systemd journal via `journalctl -f`
@@ -64,6 +66,7 @@ pub async fn run_journald(
     source: LogSource,
     tx: mpsc::Sender<NormalizedEntry>,
     grouper: Arc<ClusterGrouper>,
+    custom_parsers: Arc<CustomParserSet>,
     mut cancel: watch::Receiver<bool>,
 ) {
     let mut child = match Command::new("journalctl")
@@ -93,7 +96,7 @@ pub async fn run_journald(
             line = reader.next_line() => {
                 match line {
                     Ok(Some(l)) if !l.trim().is_empty() => {
-                        emit_line(&l, &source, &mut accumulator, &grouper, &tx).await;
+                        emit_line(&l, &source, &mut accumulator, &grouper, &custom_parsers, &tx).await;
                     }
                     Ok(None) | Err(_) => break,
                     _ => {}
@@ -102,7 +105,7 @@ pub async fn run_journald(
         }
     }
 
-    flush_accumulator(&mut accumulator, &source, &grouper, &tx).await;
+    flush_accumulator(&mut accumulator, &source, &grouper, &custom_parsers, &tx).await;
 }
 
 /// Windows Event Log via PowerShell `Get-WinEvent`
@@ -112,6 +115,7 @@ pub async fn run_windows_event(
     channel: String,
     tx: mpsc::Sender<NormalizedEntry>,
     grouper: Arc<ClusterGrouper>,
+    custom_parsers: Arc<CustomParserSet>,
     mut cancel: watch::Receiver<bool>,
 ) {
     #[cfg(not(target_os = "windows"))]
@@ -152,7 +156,7 @@ pub async fn run_windows_event(
             line = reader.next_line() => {
                 match line {
                     Ok(Some(l)) if !l.trim().is_empty() => {
-                        emit_line(&l, &source, &mut accumulator, &grouper, &tx).await;
+                        emit_line(&l, &source, &mut accumulator, &grouper, &custom_parsers, &tx).await;
                     }
                     Ok(None) | Err(_) => break,
                     _ => {}
@@ -161,5 +165,5 @@ pub async fn run_windows_event(
         }
     }
 
-    flush_accumulator(&mut accumulator, &source, &grouper, &tx).await;
+    flush_accumulator(&mut accumulator, &source, &grouper, &custom_parsers, &tx).await;
 }

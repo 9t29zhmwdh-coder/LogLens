@@ -39,6 +39,7 @@ LogLens ist ein plattformübergreifendes Entwicklerwerkzeug, das **Logs aus beli
 |---|---|
 | **Multi-Source-Collector** | Dateien, Verzeichnisse (Glob), Docker-Container & Services, macOS Unified Logging, journald, Windows EventLog, stdin |
 | **Formaterkennung** | JSON, Plaintext, key=value, Nginx Combined, Docker JSON-File, Syslog: automatisch erkannt |
+| **Eigene Parser** | Eigenes Format über eine Regex-Vorlage mit benannten Capture-Groups definieren, einer Quelle unter Einstellungen → Eigene Parser zuweisen |
 | **Stacktrace-Zusammenführung** | Mehrzeilige Stacktraces (Rust, Java, Python, JS) werden automatisch zu einem Eintrag zusammengefasst |
 | **Fehler-Clustering** | Fingerprinting entfernt UUIDs, IPs, Zeitstempel → gruppiert ähnliche Fehler per Similarity-Matching |
 | **FTS5-Volltextsuche** | SQLite FTS5 mit Ranking, Phrasensuche und Operatoren |
@@ -112,6 +113,23 @@ LogLens
 Alle Einstellungen werden gespeichert unter `~/Library/Application Support/ch.raystudio.loglens/` (macOS), `~/.local/share/loglens/` (Linux) oder `%APPDATA%\loglens\` (Windows).
 
 Der API-Key wird ausschliesslich im **System-Keychain** gespeichert, niemals als Klartext.
+
+## Eigene Parser
+
+Wenn ein Log-Format zu keinem eingebauten Parser passt (JSON, key=value, Nginx, Docker, Syslog), definiere einen eigenen unter Einstellungen → Eigene Parser: ein Name und eine Regex mit benannten Capture-Groups. Erkannte Groups (alle optional):
+
+| Group | Verwendet für | Fallback |
+|---|---|---|
+| `timestamp` | Zeitpunkt des Eintrags | aktuelle Zeit |
+| `level` | Log-Level (`error`, `warn`, ...) | `Unknown` |
+| `service` | Service-/Komponentenname | `None` |
+| `message` | Der Eintragstext | die ganze Zeile |
+
+```
+^(?<timestamp>\S+) \[(?<level>\w+)\] (?<service>[\w-]+): (?<message>.*)$
+```
+
+matcht `2026-07-13T10:00:00Z [ERROR] billing-svc: charge declined`. Standardmässig wird die `timestamp`-Group als RFC 3339 geparst; für andere Formate ein chrono-strftime-Muster (z. B. `%Y/%m/%d %H:%M:%S`) im Zeitstempel-Format-Feld der Vorlage angeben. Der Parser wird einer Quelle über das Dropdown unter Log-Quellen zugewiesen; eine Zeile, die nicht zur Regex passt, fällt auf die automatische Erkennung zurück, sodass ein eigener Parser nie stillschweigend Zeilen verwirft.
 
 ## Deinstallation / Aufräumen
 

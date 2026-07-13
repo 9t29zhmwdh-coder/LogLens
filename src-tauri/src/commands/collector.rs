@@ -24,7 +24,12 @@ pub async fn list_sources(state: State<'_, AppState>) -> Result<Vec<LogSource>> 
 }
 
 #[tauri::command]
-pub async fn watch_file(path: String, label: Option<String>, state: State<'_, AppState>) -> Result<String> {
+pub async fn watch_file(
+    path: String,
+    label: Option<String>,
+    parser_hint: Option<String>,
+    state: State<'_, AppState>,
+) -> Result<String> {
     let lbl = label.unwrap_or_else(|| {
         std::path::Path::new(&path)
             .file_name()
@@ -32,7 +37,8 @@ pub async fn watch_file(path: String, label: Option<String>, state: State<'_, Ap
             .unwrap_or("file")
             .to_string()
     });
-    let source = LogSource::new(lbl, LogSourceKind::File { path });
+    let mut source = LogSource::new(lbl, LogSourceKind::File { path });
+    source.parser_hint = parser_hint;
     let id = source.id.clone();
     ll_core::db::queries::insert_source(&state.pool, &source).await?;
     state.collector.watch(source).await?;
@@ -40,13 +46,19 @@ pub async fn watch_file(path: String, label: Option<String>, state: State<'_, Ap
 }
 
 #[tauri::command]
-pub async fn watch_docker(container_id: String, name: Option<String>, state: State<'_, AppState>) -> Result<String> {
+pub async fn watch_docker(
+    container_id: String,
+    name: Option<String>,
+    parser_hint: Option<String>,
+    state: State<'_, AppState>,
+) -> Result<String> {
     let label = name.clone().unwrap_or_else(|| container_id.chars().take(12).collect());
     let kind = LogSourceKind::DockerContainer {
         container_id: container_id.clone(),
         name: name.unwrap_or(container_id),
     };
-    let source = LogSource::new(label, kind);
+    let mut source = LogSource::new(label, kind);
+    source.parser_hint = parser_hint;
     let id = source.id.clone();
     ll_core::db::queries::insert_source(&state.pool, &source).await?;
     state.collector.watch(source).await?;

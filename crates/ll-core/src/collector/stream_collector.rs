@@ -3,6 +3,7 @@ use tokio::sync::{mpsc, watch};
 use tokio::io::{AsyncBufReadExt, BufReader};
 use crate::models::log_entry::{NormalizedEntry, LogSource};
 use crate::normalizer::stacktrace_detector::StacktraceAccumulator;
+use crate::normalizer::CustomParserSet;
 use crate::clustering::ClusterGrouper;
 use super::{emit_line, flush_accumulator};
 
@@ -10,6 +11,7 @@ pub async fn run_stdin(
     source: LogSource,
     tx: mpsc::Sender<NormalizedEntry>,
     grouper: Arc<ClusterGrouper>,
+    custom_parsers: Arc<CustomParserSet>,
     mut cancel: watch::Receiver<bool>,
 ) {
     let stdin = tokio::io::stdin();
@@ -24,7 +26,7 @@ pub async fn run_stdin(
             line = reader.next_line() => {
                 match line {
                     Ok(Some(l)) if !l.trim().is_empty() => {
-                        emit_line(&l, &source, &mut accumulator, &grouper, &tx).await;
+                        emit_line(&l, &source, &mut accumulator, &grouper, &custom_parsers, &tx).await;
                     }
                     Ok(None) | Err(_) => break,
                     _ => {}
@@ -33,5 +35,5 @@ pub async fn run_stdin(
         }
     }
 
-    flush_accumulator(&mut accumulator, &source, &grouper, &tx).await;
+    flush_accumulator(&mut accumulator, &source, &grouper, &custom_parsers, &tx).await;
 }

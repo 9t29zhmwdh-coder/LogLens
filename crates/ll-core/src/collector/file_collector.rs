@@ -8,6 +8,7 @@ use notify::event::ModifyKind;
 use anyhow::Result;
 use crate::models::log_entry::{NormalizedEntry, LogSource, LogSourceKind};
 use crate::normalizer::stacktrace_detector::StacktraceAccumulator;
+use crate::normalizer::CustomParserSet;
 use crate::clustering::ClusterGrouper;
 use super::{emit_line, flush_accumulator};
 
@@ -16,9 +17,10 @@ pub async fn run(
     path: String,
     tx: mpsc::Sender<NormalizedEntry>,
     grouper: Arc<ClusterGrouper>,
+    custom_parsers: Arc<CustomParserSet>,
     mut cancel: watch::Receiver<bool>,
 ) {
-    if let Err(e) = tail_file(&source, &path, &tx, &grouper, &mut cancel).await {
+    if let Err(e) = tail_file(&source, &path, &tx, &grouper, &custom_parsers, &mut cancel).await {
         tracing::error!("file_collector error for {}: {}", path, e);
     }
 }
@@ -28,6 +30,7 @@ async fn tail_file(
     path: &str,
     tx: &mpsc::Sender<NormalizedEntry>,
     grouper: &ClusterGrouper,
+    custom_parsers: &CustomParserSet,
     cancel: &mut watch::Receiver<bool>,
 ) -> Result<()> {
     let (notify_tx, mut notify_rx) = tokio::sync::mpsc::channel(64);
@@ -56,13 +59,13 @@ async fn tail_file(
             }
             Some(event) = notify_rx.recv() => {
                 if matches!(event.kind, EventKind::Modify(ModifyKind::Data(_))) {
-                    read_new_lines(&mut file, source, &mut accumulator, grouper, tx).await;
+                    read_new_lines(&mut file, source, &mut accumulator, grouper, custom_parsers, tx).await;
                 }
             }
         }
     }
 
-    flush_accumulator(&mut accumulator, source, grouper, tx).await;
+    flush_accumulator(&mut accumulator, source, grouper, custom_parsers, tx).await;
     Ok(())
 }
 
@@ -71,6 +74,7 @@ async fn read_new_lines(
     source: &LogSource,
     accumulator: &mut StacktraceAccumulator,
     grouper: &ClusterGrouper,
+    custom_parsers: &CustomParserSet,
     tx: &mpsc::Sender<NormalizedEntry>,
 ) {
     let mut reader = BufReader::new(&*file);
@@ -82,7 +86,7 @@ async fn read_new_lines(
             Ok(_) => {
                 let l = line.trim_end_matches('\n').trim_end_matches('\r');
                 if !l.is_empty() {
-                    emit_line(l, source, accumulator, grouper, tx).await;
+                    emit_line(l, source, accumulator, grouper, custom_parsers, tx).await;
                 }
             }
             Err(_) => break,
@@ -96,6 +100,7 @@ pub async fn run_dir(
     pattern: Option<String>,
     tx: mpsc::Sender<NormalizedEntry>,
     grouper: Arc<ClusterGrouper>,
+    custom_parsers: Arc<CustomParserSet>,
     mut cancel: watch::Receiver<bool>,
 ) {
     let glob_pattern = pattern.unwrap_or_else(|| format!("{}/**/*.log", path));
@@ -111,10 +116,11 @@ pub async fn run_dir(
                 kind: LogSourceKind::File { path: file_path.to_string_lossy().to_string() },
                 ..source.clone()
             };
-            let (tx2, grouper2, cancel2) = (tx.clone(), grouper.clone(), cancel.clone());
+            let (tx2, grouper2, custom_parsers2, cancel2) =
+                (tx.clone(), grouper.clone(), custom_parsers.clone(), cancel.clone());
             let p = file_path.to_string_lossy().to_string();
             handles.push(tokio::spawn(async move {
-                run(src, p, tx2, grouper2, cancel2).await;
+                run(src, p, tx2, grouper2, custom_parsers2, cancel2).await;
             }));
         }
 
