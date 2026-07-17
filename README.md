@@ -55,6 +55,7 @@ LogLens is a cross-platform developer tool that **collects, normalizes, clusters
 - **Tauri CLI** (`cargo tauri`): install with `cargo install tauri-cli`, required to run/build the desktop app
 - A supported OS: macOS, Windows or Ubuntu/Linux (see the CI badge above)
 - The `loglens` CLI binary (`crates/ll-cli`) is built with plain `cargo build`/`cargo install` and has no Node/Tauri dependency
+- An [Anthropic API key](https://console.anthropic.com/) (default) or [Ollama](https://ollama.ai) running locally (optional, for AI explain/root-cause; search, clustering and export work without either)
 
 ## Quick Start
 
