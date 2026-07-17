@@ -5,6 +5,18 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [0.4.2] - 2026-07-17
+
+### Security
+
+- Bumped `vite` from `^5` to `^6` (`6.4.3`), which pulls in a patched
+  `esbuild` (`^0.25.0`). Fixes 4 Dependabot alerts: esbuild dev-server
+  CORS request forwarding, Vite `server.fs.deny` bypass on Windows,
+  Vite path traversal in optimized-deps `.map` handling, and
+  launch-editor NTLMv2 hash disclosure via UNC paths on Windows. All
+  four only affect the dev server, not production builds. Verified
+  `npm run build` still succeeds after the bump.
+
 ## [0.4.1] - 2026-07-17
 
 ### Changed
