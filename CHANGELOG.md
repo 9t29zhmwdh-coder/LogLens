@@ -5,6 +5,17 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [0.4.1] - 2026-07-17
+
+### Changed
+
+- README: added the missing Anthropic/Ollama line to Requirements,
+  marked "(optional, for AI explain/root-cause; search, clustering and
+  export work without either)".
+- README.de: added the entire missing "Voraussetzungen" section (the
+  German README had no requirements section at all), mirroring the
+  English one.
+
 ## [0.4.0] - 2026-07-13
 
 ### Added

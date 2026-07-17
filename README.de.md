@@ -50,6 +50,15 @@ LogLens ist ein plattformübergreifendes Entwicklerwerkzeug, das **Logs aus beli
 | **Export** | JSON- und Markdown-Export |
 | **CLI** | `loglens watch`, `search`, `clusters`, `analyze`, `export` |
 
+## Voraussetzungen
+
+- **Rust** (Stable-Toolchain): Installation via [rustup](https://rustup.rs)
+- **Node.js 20** (LTS empfohlen) mit npm: für den Build des `frontend/`-Verzeichnisses (React + TypeScript)
+- **Tauri CLI** (`cargo tauri`): Installation mit `cargo install tauri-cli`, nötig zum Ausführen/Bauen der Desktop-App
+- Ein unterstütztes Betriebssystem: macOS, Windows oder Ubuntu/Linux (siehe CI-Badge oben)
+- Das `loglens`-CLI-Binary (`crates/ll-cli`) wird mit reinem `cargo build`/`cargo install` gebaut, ohne Node-/Tauri-Abhängigkeit
+- Ein [Anthropic API-Key](https://console.anthropic.com/) (Standard) oder lokal laufendes [Ollama](https://ollama.ai) (optional, für KI-Erklärung/Root-Cause; Suche, Clustering und Export funktionieren auch ohne)
+
 ## Schnellstart
 
 ```bash
