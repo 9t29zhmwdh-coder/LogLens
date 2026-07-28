@@ -5,6 +5,19 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [1.0.2] - 2026-07-28
+
+### Added
+
+- `.github/dependabot.yml`, covering GitHub Actions, the Cargo workspace and the frontend npm packages, with grouped weekly updates. The file was missing, and without it there are no version updates at all: security alerts only fire for disclosed vulnerabilities. Follows `engineering-standards` v0.10.0.
+
+### Fixed
+
+- `frontend/package.json` carried version 0.4.0 while the workspace and `tauri.conf.json` were on 1.0.1, the tagged version. All manifests now agree, so the next bump can touch every file that carries a version, as `release-process.md` section 2 requires.
+- `actions/checkout` was pinned to two different SHAs across the workflows. All now use v7.0.1 with the full version in the comment.
+- Seven actions were not pinned at all: `actions/checkout@v6`, `actions/setup-node@v6` in three places, `Swatinem/rust-cache@v2.9.1`, `tauri-apps/tauri-action@v1`, and `dtolnay/rust-toolchain@stable`, which is a branch and can be moved to point at different code at any time. All are now pinned to commit SHAs with the version in the comment, per `standards/ci-cd.md` section 2. Pinning also revealed that `Swatinem/rust-cache` was running on two different SHAs across workflows; both now use v2.9.1.
+- Deliberately pinned at their current versions rather than upgraded. `actions/setup-node` would jump from v6 to v7, which is a major bump that belongs in its own reviewed PR. Dependabot, added in this same change, will now propose it.
+
 ## [1.0.1] - 2026-07-20
 
 ### Changed
