@@ -5,6 +5,17 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [1.0.6] - 2026-07-29
+
+### Changed
+
+Dependency and workflow updates merged since 1.0.5:
+
+- chore(ci): bump the actions group across 1 directory with 3 updates
+- chore(deps): bump autoprefixer
+
+---
+
 ## [1.0.5] - 2026-07-28
 
 ### Fixed
