@@ -9,6 +9,11 @@ use crate::clustering::ClusterGrouper;
 use super::{emit_line, flush_accumulator};
 
 /// macOS Unified Logging via `log stream`
+// Auf anderen Plattformen greift der cfg-Block unten und kehrt sofort zurueck,
+// womit der Rest unerreichbar wird und die Parameter ungenutzt bleiben. Dasselbe
+// gilt fuer run_windows_event, das dieses Attribut schon traegt; hier fehlte es,
+// und aufgefallen ist das erst, als Check nicht mehr nur auf macOS lief.
+#[allow(unused_variables, unused_mut, unreachable_code)]
 pub async fn run_macos(
     source: LogSource,
     tx: mpsc::Sender<NormalizedEntry>,
