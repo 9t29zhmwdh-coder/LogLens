@@ -5,7 +5,25 @@
 
 </div>
 
-**KI-gestützte Log-Analyse · Echtzeit-Suche · Fehler-Clustering · Root-Cause-Berichte**
+**Macht aus 500 Kopien desselben Fehlers eine Zeile, damit das Log wieder lesbar wird.**
+
+Ein fehlschlagender Request, der in einer Schleife wiederholt wird, füllt das
+Log mit hunderten identischen Stacktraces. Da durchzuscrollen ist keine
+Analyse, sondern die Suche nach der einen abweichenden Zeile zwischen den
+Wiederholungen.
+
+LogLens bildet Fingerabdrücke von Fehlern und klappt die Duplikate zusammen,
+sodass eine Datei mit 500 Einträgen die Handvoll unterschiedlicher Probleme
+zeigt, die tatsächlich drinstecken. Zeig auf eine Logdatei oder einen
+Docker-Container und such live darüber.
+
+Was sich nicht auf einen Blick lesen lässt, erklärt dir ein Modell samt
+Lösungsvorschlag: Claude mit API-Key, oder ein lokales Ollama-Modell.
+
+**Nichts für dich, wenn** du gemeldet bekommen willst, während es passiert.
+Das hier ist für ein Log, mit dem du dich hinsetzt;
+[BugRadar](https://github.com/9t29zhmwdh-coder/BugRadar) ist das, was zuschaut
+und Auffälligkeiten meldet, sobald sie auftreten.
 
 [![CI](https://github.com/9t29zhmwdh-coder/LogLens/actions/workflows/ci.yml/badge.svg)](https://github.com/9t29zhmwdh-coder/LogLens/actions) [![CodeQL](https://github.com/9t29zhmwdh-coder/LogLens/actions/workflows/github-code-scanning/codeql/badge.svg)](https://github.com/9t29zhmwdh-coder/LogLens/security/code-scanning) [![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/9t29zhmwdh-coder/LogLens/badge)](https://securityscorecards.dev/viewer/?uri=github.com/9t29zhmwdh-coder/LogLens) [![OpenSSF Best Practices](https://www.bestpractices.dev/projects/13698/badge)](https://www.bestpractices.dev/projects/13698)
 

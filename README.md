@@ -5,7 +5,22 @@
 
 [🇩🇪 Deutsche Version](README.de.md)
 
-**AI-powered log analysis · Real-time search · Error clustering · Root-cause reports**
+**Turns 500 copies of the same error into one line, so the log becomes readable again.**
+
+One failing request retried in a loop fills a log with hundreds of identical
+stack traces. Scrolling through them is not analysis, it is looking for the
+one different line hidden between the repeats.
+
+LogLens fingerprints errors and collapses the duplicates, so a file with 500
+entries shows the handful of distinct problems it actually contains. Point it
+at a log file or a Docker container and search across it live.
+
+For anything you cannot read at a glance, a model explains the cluster and
+suggests a fix: Claude with an API key, or a local Ollama model.
+
+**Not for you if** you want to be told while it is happening. This is for a
+log you sit down with; [BugRadar](https://github.com/9t29zhmwdh-coder/BugRadar)
+is the one that watches and flags anomalies as they occur.
 
 [![CI](https://github.com/9t29zhmwdh-coder/LogLens/actions/workflows/ci.yml/badge.svg)](https://github.com/9t29zhmwdh-coder/LogLens/actions) [![CodeQL](https://github.com/9t29zhmwdh-coder/LogLens/actions/workflows/github-code-scanning/codeql/badge.svg)](https://github.com/9t29zhmwdh-coder/LogLens/security/code-scanning) [![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/9t29zhmwdh-coder/LogLens/badge)](https://securityscorecards.dev/viewer/?uri=github.com/9t29zhmwdh-coder/LogLens) [![OpenSSF Best Practices](https://www.bestpractices.dev/projects/13698/badge)](https://www.bestpractices.dev/projects/13698)
 

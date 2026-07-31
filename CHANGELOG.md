@@ -5,6 +5,14 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [1.0.10] - 2026-07-31
+
+### Changed
+
+- Both READMEs now open with the concrete problem clustering solves, which is a log filled with hundreds of identical stack traces from one retried request, rather than four feature nouns separated by dots. The exclusion paragraph draws the line against BugRadar explicitly: this is for a log you sit down with, BugRadar is the one that watches live.
+
+---
+
 ## [1.0.9] - 2026-07-30
 
 ### Added
