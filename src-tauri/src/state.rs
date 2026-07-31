@@ -21,7 +21,7 @@ pub struct AppSettings {
 impl Default for AppSettings {
     fn default() -> Self {
         Self {
-            ai_backend: "claude".to_string(),
+            ai_backend: "ollama".to_string(),
             ollama_url: "http://localhost:11434".to_string(),
             ollama_model: "llama3".to_string(),
             theme: "dark".to_string(),
