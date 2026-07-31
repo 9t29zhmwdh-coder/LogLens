@@ -5,6 +5,23 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [1.1.0] - 2026-07-31
+
+### Security
+
+- **The default AI backend is now Ollama rather than Claude.** A fresh installation defaulted to the cloud backend, so the first explanation anyone requested sent their log lines off the machine unless they had found the setting first. Existing installations keep whatever they have stored. Requesting an explanation with Claude selected and no stored key already errored before sending, and still does.
+- `SECURITY.md` claimed "no external network calls except localhost (Ollama)". That was untrue whenever the Claude backend was selected, which was the default. It now describes both backends and what each transmits.
+
+### Added
+
+- `SECURITY.md` records GHSA-wrw7-89jp-8q8g against `glib` 0.18.5, which cannot be fixed from this repository because Tauri 2.11.5 pins `gtk ^0.18` and no patched 0.18.x exists.
+
+### Fixed
+
+- The supported-versions table still listed `0.1.x`, a line that no longer exists.
+
+---
+
 ## [1.0.10] - 2026-07-31
 
 ### Changed
