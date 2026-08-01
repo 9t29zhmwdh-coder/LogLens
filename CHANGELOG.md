@@ -5,6 +5,15 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [1.1.2] - 2026-08-01
+
+### Changed
+
+- `sha2` from 0.10 to 0.11. The new version returns a digest type that no longer implements `LowerHex`, so `format!("{:x}", ..)` stopped compiling. The hex string is now written a byte at a time. That detail matters more than it looks: the fingerprint it produces is stored in `log_clusters` in the user's database, and a different rendering would leave existing clusters pointing at nothing while new lines got fresh fingerprints, so grouping would quietly fall apart.
+- A test pins the fingerprint of a fixed log line to the value measured under 0.10 before the upgrade, and a second checks the shape is lowercase hex of the expected width. Both were verified to fail when the formatting is altered, so they are evidence rather than decoration.
+
+---
+
 ## [1.1.1] - 2026-08-01
 
 ### Changed
