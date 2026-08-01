@@ -67,32 +67,47 @@ impl QueryEngine {
         let limit = filter.limit.unwrap_or(200) as i64;
         let offset = filter.offset.unwrap_or(0) as i64;
 
-        let mut cond = vec!["1=1".to_string()];
+        // Die Bedingungen bestehen nur aus festen Textstuecken, jeder Wert
+        // kommt als gebundener Parameter dazu. Vorher wurden die Werte per
+        // format! ins SQL geschrieben: `cluster_id` stammt aus dem
+        // QueryFilter, den das Frontend fuellt, und ein Apostroph darin brach
+        // aus dem Literal aus und veraenderte die WHERE-Klausel.
+        let mut cond: Vec<&'static str> = vec!["1=1"];
+        let mut werte: Vec<String> = Vec::new();
+
         if let Some(ref from) = filter.from {
-            cond.push(format!("timestamp >= '{}'", from.to_rfc3339()));
+            cond.push("timestamp >= ?");
+            werte.push(from.to_rfc3339());
         }
         if let Some(ref to) = filter.to {
-            cond.push(format!("timestamp <= '{}'", to.to_rfc3339()));
+            cond.push("timestamp <= ?");
+            werte.push(to.to_rfc3339());
         }
         if let Some(ref cid) = filter.cluster_id {
-            cond.push(format!("cluster_id = '{}'", cid));
+            cond.push("cluster_id = ?");
+            werte.push(cid.clone());
         }
         if filter.has_stacktrace == Some(true) {
-            cond.push("stacktrace IS NOT NULL".to_string());
+            cond.push("stacktrace IS NOT NULL");
         }
 
-        let where_clause = cond.join(" AND ");
         let sql = format!(
             "SELECT id, source_id, source_label, timestamp, level, service, message, \
              stacktrace, fields, raw, format, fingerprint, cluster_id, ingested_at \
              FROM log_entries \
              WHERE {} \
              ORDER BY timestamp DESC \
-             LIMIT {} OFFSET {}",
-            where_clause, limit, offset
+             LIMIT ? OFFSET ?",
+            cond.join(" AND ")
         );
 
-        let rows = sqlx::query_as::<_, EntryRow>(&sql)
+        let mut abfrage = sqlx::query_as::<_, EntryRow>(&sql);
+        for wert in werte {
+            abfrage = abfrage.bind(wert);
+        }
+        let rows = abfrage
+            .bind(limit)
+            .bind(offset)
             .fetch_all(&self.pool)
             .await?;
 
