@@ -1,6 +1,7 @@
 use once_cell::sync::Lazy;
 use regex::Regex;
 use sha2::{Sha256, Digest};
+use std::fmt::Write as _;
 
 // Patterns to normalize away before hashing
 static STRIP_UUID: Lazy<Regex> = Lazy::new(|| {
@@ -30,7 +31,15 @@ pub fn compute_fingerprint(message: &str) -> (String, String) {
     let template = normalize(message);
     let mut hasher = Sha256::new();
     hasher.update(template.as_bytes());
-    let hash = format!("{:x}", hasher.finalize());
+    // sha2 0.11 liefert einen Typ ohne LowerHex, `format!("{:x}", ..)` geht
+    // nicht mehr. Von Hand formatiert, weil die Ausgabe zeichengleich bleiben
+    // muss: der Fingerabdruck steht in der Datenbank des Nutzers, und eine
+    // andere Darstellung liesse bestehende Cluster ins Leere laufen.
+    let digest = hasher.finalize();
+    let mut hash = String::with_capacity(digest.len() * 2);
+    for byte in digest {
+        write!(hash, "{byte:02x}").expect("Schreiben in einen String schlaegt nicht fehl");
+    }
     let fingerprint = hash[..16].to_string();
     (fingerprint, template)
 }
