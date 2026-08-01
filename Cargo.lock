@@ -1317,15 +1317,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "file-id"
-version = "0.2.3"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e1fc6a637b6dc58414714eddd9170ff187ecb0933d4c7024d1abbd23a3cc26e9"
-dependencies = [
- "windows-sys 0.60.2",
-]
-
-[[package]]
 name = "filetime"
 version = "0.2.29"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2536,7 +2527,7 @@ checksum = "92daf443525c4cce67b150400bc2316076100ce0b3686209eb8cf3c31612e6f0"
 
 [[package]]
 name = "ll-cli"
-version = "1.1.1"
+version = "1.1.2"
 dependencies = [
  "anyhow",
  "chrono",
@@ -2552,7 +2543,7 @@ dependencies = [
 
 [[package]]
 name = "ll-core"
-version = "1.1.1"
+version = "1.1.2"
 dependencies = [
  "anyhow",
  "async-trait",
@@ -2563,7 +2554,6 @@ dependencies = [
  "glob",
  "keyring",
  "notify",
- "notify-debouncer-full",
  "once_cell",
  "regex",
  "reqwest 0.12.28",
@@ -2595,7 +2585,7 @@ checksum = "0ceec5bc11778974d1bcb055b18002eba7f4b3518b6a0081b3af5f21666da9ad"
 
 [[package]]
 name = "loglens-tauri"
-version = "1.1.1"
+version = "1.1.2"
 dependencies = [
  "anyhow",
  "dirs 5.0.1",
@@ -2783,20 +2773,6 @@ dependencies = [
  "mio 0.8.11",
  "walkdir",
  "windows-sys 0.48.0",
-]
-
-[[package]]
-name = "notify-debouncer-full"
-version = "0.3.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "fb7fd166739789c9ff169e654dc1501373db9d80a4c3f972817c8a4d7cf8f34e"
-dependencies = [
- "crossbeam-channel",
- "file-id",
- "log",
- "notify",
- "parking_lot",
- "walkdir",
 ]
 
 [[package]]

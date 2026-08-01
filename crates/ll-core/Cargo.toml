@@ -18,7 +18,6 @@ async-trait   = { workspace = true }
 futures-util  = { workspace = true }
 
 notify                = "6"
-notify-debouncer-full = "0.3"
 bollard               = "0.18"
 sqlx = { workspace = true }
 regex           = "1"
