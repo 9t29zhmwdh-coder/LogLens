@@ -5,11 +5,25 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [1.1.4] - 2026-08-01
+
+### Security
+
+- **A filter value from the frontend could rewrite the SQL query.** `structured_query` assembled its WHERE clause with `format!` and inserted `cluster_id` as a raw string between quotes. That value comes from `QueryFilter`, which the frontend fills, so an apostrophe in it escaped the literal and changed the condition. Passing `x' OR '1'='1` returned every row in the table instead of none. All values are now bound parameters and the SQL text is assembled from fixed fragments only.
+- A test demonstrates it rather than asserting it: it fails against the previous code, where the crafted filter returns two rows instead of zero, and passes after the change. A second test covers the ordinary case so the fix cannot silently break normal filtering.
+- Reachability, stated plainly: the frontend is this application's own code, so an attacker needs a way to influence what it sends. It is not remotely exploitable as shipped. It is still an injection in a tool whose subject is other people's log files, and the fix costs nothing.
+
+### Fixed
+
+- The changelog entry for 1.1.3 read "one declared dependencies ... They were" for a single item. Corrected.
+
+---
+
 ## [1.1.3] - 2026-08-01
 
 ### Removed
 
-- one declared dependencies that no code references: notify-debouncer-full. They were compiled on every build, shipped their own transitive tree, counted toward the supply-chain surface, and produced Dependabot pull requests proposing upgrades to code nobody calls. Verified by removing them and running `cargo check`, `cargo clippy` with `-D warnings` and the full test suite, all clean.
+- One declared dependency that no code references: `notify-debouncer-full`. It was compiled on every build, shipped its own transitive tree, counted toward the supply-chain surface, and produced a Dependabot pull request proposing an upgrade to code nobody calls. Verified by removing it and running `cargo check`, `cargo clippy` with `-D warnings` and the full test suite, all clean.
 
 ---
 
