@@ -49,7 +49,7 @@ export default function ClustersView() {
               ${selected?.id === c.id ? 'bg-ll-accent/10' : ''}`}
           >
             <div className="flex items-center gap-2 mb-1">
-              <span className={`text-[11px] px-2 py-0.5 rounded uppercase ${LEVEL_BADGE[c.level] ?? LEVEL_BADGE.debug}`}>
+              <span className={`text-[11px] px-2 py-0.5 rounded-sm uppercase ${LEVEL_BADGE[c.level] ?? LEVEL_BADGE.debug}`}>
                 {c.level}
               </span>
               <span className="text-white font-medium text-xs truncate flex-1">{c.template}</span>
@@ -109,11 +109,11 @@ function ReportPanel({ report }: { report: RootCauseReport }) {
       <div>
         <div className="text-ll-muted mb-1">{t('clusters.fixSteps')}</div>
         {report.fix_suggestions.map(step => (
-          <div key={step.step} className="mb-2 bg-ll-bg rounded p-2">
+          <div key={step.step} className="mb-2 bg-ll-bg rounded-sm p-2">
             <div className="text-green-400 font-medium">{step.step}. {step.title}</div>
             <div className="text-gray-300 mt-0.5">{step.description}</div>
             {step.command && (
-              <code className="block mt-1 text-cyan-300 bg-black/40 rounded px-2 py-0.5">$ {step.command}</code>
+              <code className="block mt-1 text-cyan-300 bg-black/40 rounded-sm px-2 py-0.5">$ {step.command}</code>
             )}
           </div>
         ))}

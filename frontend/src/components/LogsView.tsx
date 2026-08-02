@@ -47,7 +47,7 @@ export default function LogsView() {
           <input
             type="text"
             placeholder={t('logs.searchPlaceholder')}
-            className="flex-1 bg-ll-bg border border-ll-border rounded px-3 py-1 text-sm text-gray-200 placeholder-ll-muted focus:outline-none focus:border-ll-accent"
+            className="flex-1 bg-ll-bg border border-ll-border rounded-sm px-3 py-1 text-sm text-gray-200 placeholder-ll-muted focus:outline-hidden focus:border-ll-accent"
             value={searchInput}
             onChange={e => setSearchInput(e.target.value)}
           />
@@ -86,7 +86,7 @@ export default function LogsView() {
             {selected.stacktrace && (
               <div>
                 <div className="text-ll-muted mb-1">{t('logs.stacktrace')}</div>
-                <pre className="text-red-300 text-[11px] whitespace-pre-wrap break-all bg-ll-bg rounded p-2">
+                <pre className="text-red-300 text-[11px] whitespace-pre-wrap break-all bg-ll-bg rounded-sm p-2">
                   {selected.stacktrace.join('\n')}
                 </pre>
               </div>
@@ -163,7 +163,7 @@ function Field({ label, value, multiline }: { label: string; value: string; mult
     <div>
       <div className="text-ll-muted mb-0.5">{label}</div>
       {multiline
-        ? <div className="text-gray-200 break-all whitespace-pre-wrap bg-ll-bg rounded p-2">{value}</div>
+        ? <div className="text-gray-200 break-all whitespace-pre-wrap bg-ll-bg rounded-sm p-2">{value}</div>
         : <div className="text-gray-200">{value}</div>
       }
     </div>

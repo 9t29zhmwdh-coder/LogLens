@@ -50,7 +50,7 @@ export default function SourcesView() {
           <select
             value={parserHint}
             onChange={e => setParserHint(e.target.value)}
-            className="bg-ll-bg border border-ll-border rounded px-2 py-1 text-sm text-gray-200 focus:outline-none focus:border-ll-accent"
+            className="bg-ll-bg border border-ll-border rounded-sm px-2 py-1 text-sm text-gray-200 focus:outline-hidden focus:border-ll-accent"
           >
             <option value="">{t('sources.parserAuto')}</option>
             {settings.custom_parsers.map(p => (
@@ -65,17 +65,17 @@ export default function SourcesView() {
         <div className="text-sm font-medium text-gray-300">{t('sources.addFileTitle')}</div>
         <input
           placeholder="/var/log/app.log  or  /var/log/*.log"
-          className="w-full bg-ll-bg border border-ll-border rounded px-3 py-1.5 text-sm text-gray-200 placeholder-ll-muted focus:outline-none focus:border-ll-accent"
+          className="w-full bg-ll-bg border border-ll-border rounded-sm px-3 py-1.5 text-sm text-gray-200 placeholder-ll-muted focus:outline-hidden focus:border-ll-accent"
           value={filePath} onChange={e => setFilePath(e.target.value)}
         />
         <div className="flex gap-2">
           <input
             placeholder={t('sources.labelOptional')}
-            className="flex-1 bg-ll-bg border border-ll-border rounded px-3 py-1.5 text-sm text-gray-200 placeholder-ll-muted focus:outline-none focus:border-ll-accent"
+            className="flex-1 bg-ll-bg border border-ll-border rounded-sm px-3 py-1.5 text-sm text-gray-200 placeholder-ll-muted focus:outline-hidden focus:border-ll-accent"
             value={fileLabel} onChange={e => setFileLabel(e.target.value)}
           />
           <button onClick={addFile}
-            className="px-4 py-1.5 bg-ll-accent/20 text-ll-accent rounded hover:bg-ll-accent/30 text-sm transition-colors">
+            className="px-4 py-1.5 bg-ll-accent/20 text-ll-accent rounded-sm hover:bg-ll-accent/30 text-sm transition-colors">
             {t('sources.watch')}
           </button>
         </div>
@@ -87,11 +87,11 @@ export default function SourcesView() {
         <div className="flex gap-2">
           <input
             placeholder="container-name or ID"
-            className="flex-1 bg-ll-bg border border-ll-border rounded px-3 py-1.5 text-sm text-gray-200 placeholder-ll-muted focus:outline-none focus:border-ll-accent"
+            className="flex-1 bg-ll-bg border border-ll-border rounded-sm px-3 py-1.5 text-sm text-gray-200 placeholder-ll-muted focus:outline-hidden focus:border-ll-accent"
             value={dockerId} onChange={e => setDockerId(e.target.value)}
           />
           <button onClick={addDocker}
-            className="px-4 py-1.5 bg-ll-accent/20 text-ll-accent rounded hover:bg-ll-accent/30 text-sm transition-colors">
+            className="px-4 py-1.5 bg-ll-accent/20 text-ll-accent rounded-sm hover:bg-ll-accent/30 text-sm transition-colors">
             {t('sources.watch')}
           </button>
         </div>

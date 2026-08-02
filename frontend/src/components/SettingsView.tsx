@@ -62,12 +62,12 @@ export default function SettingsView() {
               <input
                 type="password"
                 placeholder="sk-ant-..."
-                className="flex-1 bg-ll-bg border border-ll-border rounded px-3 py-1.5 text-sm text-gray-200 placeholder-ll-muted focus:outline-none focus:border-ll-accent"
+                className="flex-1 bg-ll-bg border border-ll-border rounded-sm px-3 py-1.5 text-sm text-gray-200 placeholder-ll-muted focus:outline-hidden focus:border-ll-accent"
                 value={apiKey}
                 onChange={e => setApiKey(e.target.value)}
               />
               <button onClick={saveKey}
-                className="px-4 py-1.5 bg-ll-accent/20 text-ll-accent rounded hover:bg-ll-accent/30 text-sm transition-colors">
+                className="px-4 py-1.5 bg-ll-accent/20 text-ll-accent rounded-sm hover:bg-ll-accent/30 text-sm transition-colors">
                 {t('settings.save')}
               </button>
             </div>
@@ -78,13 +78,13 @@ export default function SettingsView() {
           <div className="space-y-2">
             <input
               placeholder="Ollama URL"
-              className="w-full bg-ll-bg border border-ll-border rounded px-3 py-1.5 text-sm text-gray-200 placeholder-ll-muted focus:outline-none focus:border-ll-accent"
+              className="w-full bg-ll-bg border border-ll-border rounded-sm px-3 py-1.5 text-sm text-gray-200 placeholder-ll-muted focus:outline-hidden focus:border-ll-accent"
               value={settings.ollama_url}
               onChange={e => setSettings({ ...settings, ollama_url: e.target.value })}
             />
             <input
               placeholder="Model (e.g. llama3)"
-              className="w-full bg-ll-bg border border-ll-border rounded px-3 py-1.5 text-sm text-gray-200 placeholder-ll-muted focus:outline-none focus:border-ll-accent"
+              className="w-full bg-ll-bg border border-ll-border rounded-sm px-3 py-1.5 text-sm text-gray-200 placeholder-ll-muted focus:outline-hidden focus:border-ll-accent"
               value={settings.ollama_model}
               onChange={e => setSettings({ ...settings, ollama_model: e.target.value })}
             />
@@ -114,7 +114,7 @@ export default function SettingsView() {
           <input
             type="number"
             min={1000} max={50000} step={1000}
-            className="bg-ll-bg border border-ll-border rounded px-3 py-1.5 text-sm text-gray-200 w-32 focus:outline-none focus:border-ll-accent"
+            className="bg-ll-bg border border-ll-border rounded-sm px-3 py-1.5 text-sm text-gray-200 w-32 focus:outline-hidden focus:border-ll-accent"
             value={settings.max_entries_in_memory}
             onChange={e => setSettings({ ...settings, max_entries_in_memory: parseInt(e.target.value) })}
           />
@@ -130,7 +130,7 @@ export default function SettingsView() {
 
       <div className="flex items-center gap-4">
         <button onClick={save}
-          className="px-5 py-2 bg-ll-accent text-ll-bg rounded font-medium text-sm hover:opacity-90 transition-opacity">
+          className="px-5 py-2 bg-ll-accent text-ll-bg rounded-sm font-medium text-sm hover:opacity-90 transition-opacity">
           {t('settings.saveSettings')}
         </button>
         {status && <span className="text-xs text-green-400">{status}</span>}
@@ -168,7 +168,7 @@ function CustomParserList({ settings, setSettings }: {
     <div className="space-y-3">
       <div className="space-y-1.5">
         {settings.custom_parsers.map(p => (
-          <div key={p.id} className="flex items-center justify-between bg-ll-bg rounded px-3 py-2">
+          <div key={p.id} className="flex items-center justify-between bg-ll-bg rounded-sm px-3 py-2">
             <div>
               <div className="text-sm text-gray-200">{p.name}</div>
               <div className="text-xs text-ll-muted font-mono">{p.line_regex}</div>
@@ -183,22 +183,22 @@ function CustomParserList({ settings, setSettings }: {
       <div className="space-y-2 pt-2 border-t border-ll-border">
         <input
           placeholder={t('settings.parserName')}
-          className="w-full bg-ll-bg border border-ll-border rounded px-3 py-1.5 text-sm text-gray-200 placeholder-ll-muted focus:outline-none focus:border-ll-accent"
+          className="w-full bg-ll-bg border border-ll-border rounded-sm px-3 py-1.5 text-sm text-gray-200 placeholder-ll-muted focus:outline-hidden focus:border-ll-accent"
           value={name} onChange={e => setName(e.target.value)}
         />
         <input
           placeholder={String.raw`^(?<timestamp>\S+) \[(?<level>\w+)\] (?<service>[\w-]+): (?<message>.*)$`}
-          className="w-full bg-ll-bg border border-ll-border rounded px-3 py-1.5 text-sm text-gray-200 placeholder-ll-muted focus:outline-none focus:border-ll-accent font-mono"
+          className="w-full bg-ll-bg border border-ll-border rounded-sm px-3 py-1.5 text-sm text-gray-200 placeholder-ll-muted focus:outline-hidden focus:border-ll-accent font-mono"
           value={regex} onChange={e => setRegex(e.target.value)}
         />
         <div className="flex gap-2">
           <input
             placeholder={t('settings.timestampFormatOptional')}
-            className="flex-1 bg-ll-bg border border-ll-border rounded px-3 py-1.5 text-sm text-gray-200 placeholder-ll-muted focus:outline-none focus:border-ll-accent font-mono"
+            className="flex-1 bg-ll-bg border border-ll-border rounded-sm px-3 py-1.5 text-sm text-gray-200 placeholder-ll-muted focus:outline-hidden focus:border-ll-accent font-mono"
             value={tsFormat} onChange={e => setTsFormat(e.target.value)}
           />
           <button onClick={add}
-            className="px-4 py-1.5 bg-ll-accent/20 text-ll-accent rounded hover:bg-ll-accent/30 text-sm transition-colors">
+            className="px-4 py-1.5 bg-ll-accent/20 text-ll-accent rounded-sm hover:bg-ll-accent/30 text-sm transition-colors">
             {t('settings.addParser')}
           </button>
         </div>
