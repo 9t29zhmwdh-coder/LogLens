@@ -5,6 +5,24 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [1.1.8] - 2026-08-02
+
+### Fixed
+
+- **File tailing has never worked on Windows.** `file_collector` only reacted to `Modify(Data(_))`, and Windows reports an append as `Modify(Any)`. Every appended line was therefore ignored there: no error, no message, just a window that stayed empty while the file grew. macOS and Linux send `Modify(Data(Content))`, which is why it went unnoticed. The filter accepts any `Modify` now. A surplus event costs nothing, because `read_new_lines` reads from the current position and returns immediately when there is nothing new; a missed one costs the entire feature.
+
+### Added
+
+- A test for the tailing loop, which had none, and a second that reports which event kinds the running platform actually sends. The second is what answered the question: guessing was not possible from a Mac, and the first attempt to reason about it reached the wrong conclusion, ruling the filter correct after checking only macOS.
+- Both tests run on all three platforms. The tailing test fails on Windows without this fix, which is how the defect was established rather than assumed.
+
+### Changed
+
+- `notify` 6.1.1 to 8.2.0. Both versions behave identically on this point, verified by the measurement running under each: the platform decides the event kind, not the library version.
+- The tailing test appends two lines rather than one, because `StacktraceAccumulator` holds a line back until the next one shows whether a continuation follows. That behaviour is now pinned.
+
+---
+
 ## [1.1.7] - 2026-08-02
 
 ### Changed

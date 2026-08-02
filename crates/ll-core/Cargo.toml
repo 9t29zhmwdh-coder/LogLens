@@ -17,7 +17,7 @@ tracing       = { workspace = true }
 async-trait   = { workspace = true }
 futures-util  = { workspace = true }
 
-notify                = "6"
+notify                = "8"
 bollard               = "0.18"
 sqlx = { workspace = true }
 regex           = "1"

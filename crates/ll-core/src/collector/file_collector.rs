@@ -4,7 +4,6 @@ use std::fs::File;
 use std::path::Path;
 use tokio::sync::{mpsc, watch};
 use notify::{Watcher, RecursiveMode, RecommendedWatcher, EventKind};
-use notify::event::ModifyKind;
 use anyhow::Result;
 use crate::models::log_entry::{NormalizedEntry, LogSource, LogSourceKind};
 use crate::normalizer::stacktrace_detector::StacktraceAccumulator;
@@ -58,7 +57,14 @@ async fn tail_file(
                 if *cancel.borrow() { break; }
             }
             Some(event) = notify_rx.recv() => {
-                if matches!(event.kind, EventKind::Modify(ModifyKind::Data(_))) {
+                // Jede Art von Modify, nicht nur Data. Windows meldet beim
+                // Anhaengen `Modify(Any)`, macOS und Linux `Modify(Data(..))`.
+                // Der engere Filter liess unter Windows also nie nachlesen:
+                // kein Fehler, keine Meldung, nur ein leeres Fenster. Ein
+                // ueberzaehliges Ereignis kostet dagegen nichts, weil
+                // read_new_lines ab der aktuellen Position liest und bei
+                // fehlenden Daten sofort mit Ok(0) endet.
+                if matches!(event.kind, EventKind::Modify(_)) {
                     read_new_lines(&mut file, source, &mut accumulator, grouper, custom_parsers, tx).await;
                 }
             }
