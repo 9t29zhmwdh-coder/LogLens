@@ -5,6 +5,15 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [1.1.9] - 2026-08-02
+
+### Changed
+
+- React 18 to 19, together with `react-dom` and both type packages. Dependabot had split these across two pull requests, and neither could be merged alone: `@types/react-dom` 18 requires `@types/react` 18, so raising one of them left npm unable to resolve the peer dependency at all. Moving all four in one step resolves cleanly.
+- The migration needed no code changes, which was checked rather than hoped for. `createRoot` was already in use, and the code contains no string refs, no `propTypes`, no argument-less `useRef`, no `forwardRef` and no `defaultProps`, which is the list of things React 19 removes. Callback refs, whose return value became a cleanup function in 19, do not appear either.
+
+---
+
 ## [1.1.8] - 2026-08-02
 
 ### Fixed
