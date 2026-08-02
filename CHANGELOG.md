@@ -5,6 +5,15 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [1.1.5] - 2026-08-02
+
+### Security
+
+- `keyring` switches from `crypto-openssl` to `crypto-rust`, which takes OpenSSL out of the Linux build. The Secret Service protocol encrypts the session between the application and the keyring daemon, and that encryption came from the OpenSSL C library, reaching this tree through `keyring` and `secret-service`. `crypto-rust` implements the same algorithms the specification prescribes, AES-CBC with SHA-2 and HKDF, from the RustCrypto crates. The wire format belongs to the specification rather than to either implementation, so an existing keyring stays readable.
+- Afterwards `Cargo.lock` holds no `openssl` package at all, where it held one before. With it goes a C library with a long CVE history and the requirement to have its development headers present when building for Linux. macOS and Windows never compiled this path; both use their native keychain.
+
+---
+
 ## [1.1.4] - 2026-08-01
 
 ### Security
