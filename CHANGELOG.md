@@ -5,6 +5,14 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [1.1.7] - 2026-08-02
+
+### Changed
+
+- `bollard` 0.18.1 to 0.21.0, the Docker client. The options types moved out of the topic modules into `query_parameters` and lost their generic parameter, so `bollard::container::LogsOptions::<String>` becomes `bollard::query_parameters::LogsOptions`. `ListContainersOptions::filters` is optional now rather than a bare map.
+
+---
+
 ## [1.1.6] - 2026-08-02
 
 ### Changed
