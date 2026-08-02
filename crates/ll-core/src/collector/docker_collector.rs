@@ -1,7 +1,7 @@
 use std::sync::Arc;
 use tokio::sync::{mpsc, watch};
 use bollard::Docker;
-use bollard::container::LogsOptions;
+use bollard::query_parameters::LogsOptions;
 use futures_util::StreamExt;
 use crate::models::log_entry::{NormalizedEntry, LogSource};
 use crate::normalizer::stacktrace_detector::StacktraceAccumulator;
@@ -25,7 +25,7 @@ pub async fn run_container(
         }
     };
 
-    let opts = LogsOptions::<String> {
+    let opts = LogsOptions {
         follow: true,
         stdout: true,
         stderr: true,
@@ -88,8 +88,9 @@ pub async fn run_service(
     let mut filters: std::collections::HashMap<String, Vec<String>> = std::collections::HashMap::new();
     filters.insert("label".to_string(), vec![format!("com.docker.compose.service={}", service_name)]);
 
-    let containers = match docker.list_containers(Some(bollard::container::ListContainersOptions {
-        filters,
+    let containers = match docker.list_containers(Some(bollard::query_parameters::ListContainersOptions {
+        // `filters` ist in 0.21 optional statt direkt eine HashMap.
+        filters: Some(filters),
         ..Default::default()
     })).await {
         Ok(c) => c,

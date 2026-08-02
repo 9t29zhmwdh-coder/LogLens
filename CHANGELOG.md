@@ -5,6 +5,15 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [1.1.10] - 2026-08-02
+
+### Fixed
+
+- **1.1.7 claimed a `bollard` upgrade that was never in it.** Its changelog describes moving to 0.21 and following the API reorganisation, but the merged pull request contained only `CHANGELOG.md`, `Cargo.toml` and `tauri.conf.json`. The version line in `crates/ll-core/Cargo.toml` and the migration in `docker_collector.rs` were missing, so the release shipped with `bollard` 0.18 and a changelog entry describing work that had not happened. The cause was mine: an intervening `git stash` removed the code changes from the working tree, and `git add -A` then committed what was left. This release contains what 1.1.7 said it did.
+- The entry for 1.1.7 stays as written rather than being edited after the fact. It was published; correcting the record belongs here.
+
+---
+
 ## [1.1.9] - 2026-08-02
 
 ### Changed
