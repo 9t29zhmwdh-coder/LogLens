@@ -101,7 +101,13 @@ impl QueryEngine {
             cond.join(" AND ")
         );
 
-        let mut abfrage = sqlx::query_as::<_, EntryRow>(&sql);
+        // sqlx 0.9 nimmt nur noch `&'static str` entgegen und verlangt fuer
+        // alles andere diese ausdrueckliche Zusicherung. Sie stimmt hier: der
+        // String entsteht ausschliesslich aus den festen Textstuecken oben,
+        // jeder Wert kommt gebunden dazu. Vor dem Umbau auf Bindungen waere
+        // dieselbe Zusicherung eine Unwahrheit gewesen, siehe der Test in
+        // tests/query_injection.rs.
+        let mut abfrage = sqlx::query_as::<_, EntryRow>(sqlx::AssertSqlSafe(sql));
         for wert in werte {
             abfrage = abfrage.bind(wert);
         }
