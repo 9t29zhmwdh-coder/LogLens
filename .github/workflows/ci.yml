@@ -95,10 +95,16 @@ jobs:
         run: npm ci && npm run build
         working-directory: frontend
 
+      # Wie im check-Job ueber sqlx-cli und nicht ueber das sqlite3 des Systems.
+      # Dessen Bibliothek bringt unter macOS kein FTS5 mit, die Migration bricht
+      # dort an der Volltextsuche ab und die Query-Makros finden die Tabelle
+      # anschliessend nicht. sqlx-cli bringt seine eigene SQLite-Bibliothek mit.
+      - name: Install sqlx-cli
+        run: cargo install sqlx-cli --no-default-features --features sqlite
       - name: Prepare database
         run: |
-          sqlite3 ci_check.db < crates/ll-core/src/db/migrations/0001_init.sql || true
-          for m in crates/ll-core/src/db/migrations/*.sql; do sqlite3 ci_check.db < "$m" || true; done
+          sqlx database create
+          sqlx migrate run --source crates/ll-core/src/db/migrations
 
       - name: Build the application binary
         run: cargo build --bin loglens-tauri
