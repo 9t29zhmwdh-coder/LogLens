@@ -15,7 +15,7 @@
     "react": "^19",
     "react-dom": "^19",
     "recharts": "^2",
-    "zustand": "^4"
+    "zustand": "^5"
   },
   "devDependencies": {
     "@types/react": "^19",
