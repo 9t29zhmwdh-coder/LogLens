@@ -5,6 +5,19 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [1.1.7] - 2026-08-02
+
+### Changed
+
+- `notify` 6.1.1 to 8.2.0, two major versions at once, in the crate that watches log files for new lines. A green build says nothing useful here: if the watcher stopped reporting appends, nothing would fail, the window would simply stay empty.
+
+### Added
+
+- A test for the tailing loop, which had none. It writes to a watched file and waits for the line to arrive at the collector, so the upgrade is answerable by measurement rather than by hope. Verified against 6.1.1 first, then against 8.2.0, with `cargo tree` confirming which version was actually built each time.
+- Writing it turned up two things worth recording. macOS reports `Modify(Data(Content))` under both versions, so the event filter in `file_collector` is right on this platform and unchanged by the upgrade. And a line is deliberately held back until the next one arrives, because `StacktraceAccumulator` has to know whether a continuation follows; the test appends two lines for that reason and now pins that behaviour.
+
+---
+
 ## [1.1.6] - 2026-08-02
 
 ### Changed
