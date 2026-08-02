@@ -5,6 +5,16 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [1.1.6] - 2026-08-02
+
+### Changed
+
+- `sqlx` 0.8.6 to 0.9.0. The new version refuses to compile SQL that is not a `&'static str` unless the call is wrapped in `AssertSqlSafe`, which is how it forces dynamic statements to be looked at rather than waved through. That refusal is what surfaced the injection fixed in 1.1.4.
+- The one dynamic statement carries that wrapper now, and the assertion is true: the string is assembled from fixed fragments only and every value arrives as a bound parameter. Before 1.1.4 the same wrapper would have been a false claim, which is why the upgrade waited for the fix rather than the other way round.
+- The injection test from 1.1.4 passes unchanged under 0.9, so the guarantee survived the upgrade rather than being assumed to.
+
+---
+
 ## [1.1.5] - 2026-08-02
 
 ### Security
