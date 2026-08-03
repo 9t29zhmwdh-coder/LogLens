@@ -24,6 +24,5 @@ anyhow   = { workspace = true }
 tracing  = { workspace = true }
 tracing-subscriber = { version = "0.3", features = ["env-filter"] }
 keyring  = "3"
-dirs     = "5"
 thiserror = { workspace = true }
 sqlx     = { workspace = true }

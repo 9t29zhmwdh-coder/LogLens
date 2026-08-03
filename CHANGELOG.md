@@ -5,6 +5,26 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [1.2.2] - 2026-08-03
+
+### Changed
+
+- `thiserror` 1 to 2. The error strings the frontend shows are unchanged, held by new tests that pass under both versions. `cargo tree` confirms our code moved; 1.0.69 still appears below `tauri-build` through `json-patch`, which is not ours to raise.
+- `dirs` 5 to 6. The directory the database lands in is unchanged, and CI checks that on macOS, Linux and Windows.
+- `postcss` 8.5.24 to 8.5.25. The generated stylesheet keeps the same content hash.
+- `github/codeql-action` 4.37.3 to 4.37.4 and `actions/attest` 4.2.0 to 4.2.1, merged separately and carried by this version. All pinned SHAs were checked against the tags their comments name.
+
+### Added
+
+- Tests that hold the `LlError` messages. These are not internal strings: `Serialize` hands the `Display` output straight to the frontend, where it appears in the window.
+- A test that holds where the database directory resolves. If that derivation moves, the application looks for its data somewhere new and the old data is gone as far as a user is concerned.
+
+### Removed
+
+- `thiserror` from `ll-core` and `dirs` from `src-tauri`. Both were declared and never referenced.
+
+---
+
 ## [1.2.1] - 2026-08-03
 
 ### Fixed
