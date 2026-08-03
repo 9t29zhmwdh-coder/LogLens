@@ -5,6 +5,20 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [1.2.0] - 2026-08-03
+
+### Changed
+
+- Vite 6 to 8 and @vitejs/plugin-react 4 to 6. Vite 8 replaces the Rollup bundler with Rolldown. No configuration change was needed, and the output came out smaller: 620 kB of JavaScript instead of 641 kB, 11.7 kB of CSS instead of 13.1 kB.
+- Tailwind CSS 3 to 4. The configuration file is gone. The custom colours and the mono font stack now live in the stylesheet as theme variables, and autoprefixer is no longer a dependency because version 4 handles prefixing itself.
+- Two utility classes were renamed across five components. In version 3 `rounded` meant 0.25rem and `rounded-sm` meant half of that. Version 4 shifted the scale by one step, so the old `rounded` is now written `rounded-sm`. Keeping the old name would have quietly halved every corner radius in the interface. `outline-none` became `outline-hidden`.
+
+### Fixed
+
+- `.gitignore` now covers `*.db`. The database the pipeline builds to check the queries was sitting in the working directory unignored and could be committed by accident.
+
+---
+
 ## [1.1.11] - 2026-08-02
 
 ### Added
