@@ -2596,7 +2596,6 @@ name = "loglens-tauri"
 version = "1.2.1"
 dependencies = [
  "anyhow",
- "dirs 5.0.1",
  "keyring",
  "ll-core",
  "serde",

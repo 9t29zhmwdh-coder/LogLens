@@ -334,3 +334,34 @@ fn get_api_key() -> Result<String> {
     let kr = keyring::Entry::new("loglens", "claude_api_key")?;
     Ok(kr.get_password()?)
 }
+
+#[cfg(test)]
+mod tests {
+    /// `dirs` liefert das Verzeichnis, in dem die Datenbank landet. Aendert ein
+    /// Versionssprung diese Ableitung, sucht die Anwendung ihre Daten an einer
+    /// neuen Stelle und die alten sind aus Nutzersicht verschwunden. Der Test
+    /// laeuft in der CI auf allen drei Zielplattformen, also wird die Zusage
+    /// auch dort geprueft, wo ich sie nicht selbst ausfuehren kann.
+    #[test]
+    fn datenverzeichnis_bleibt_am_erwarteten_ort() {
+        let basis = dirs::data_local_dir().expect("kein lokales Datenverzeichnis");
+
+        #[cfg(target_os = "macos")]
+        assert!(
+            basis.ends_with("Library/Application Support"),
+            "unerwartet: {basis:?}"
+        );
+
+        #[cfg(target_os = "linux")]
+        assert!(basis.ends_with(".local/share"), "unerwartet: {basis:?}");
+
+        #[cfg(target_os = "windows")]
+        assert!(
+            basis.to_string_lossy().contains("AppData"),
+            "unerwartet: {basis:?}"
+        );
+
+        let db = super::get_db_path();
+        assert!(db.ends_with("loglens/loglens.db"), "unerwartet: {db:?}");
+    }
+}
