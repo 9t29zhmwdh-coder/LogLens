@@ -61,7 +61,7 @@ export default function App() {
         ))}
         <button
           onClick={toggle}
-          className="mt-auto w-10 h-8 flex items-center justify-center rounded text-[10px] text-ll-muted hover:text-gray-200 hover:bg-white/5 transition-colors border border-ll-border"
+          className="mt-auto w-10 h-8 flex items-center justify-center rounded-sm text-[10px] text-ll-muted hover:text-gray-200 hover:bg-white/5 transition-colors border border-ll-border"
         >
           {lang === 'en' ? 'DE' : 'EN'}
         </button>

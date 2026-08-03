@@ -12,6 +12,7 @@ src-tauri/gen/
 .vscode/
 *.code-workspace
 ~/.loglens/
+*.db
 *.sqlite
 *.sqlite-wal
 *.sqlite-shm
