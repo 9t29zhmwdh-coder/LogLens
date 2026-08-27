@@ -66,11 +66,29 @@ fn main() {
                         tracing::warn!("DB insert failed: {}", e);
                     }
 
+                    // Persist the cluster the entry was grouped into. Without
+                    // this the grouper's work stayed in memory and the
+                    // clusters view, which reads the table, was always empty.
+                    // One extra write per entry is acceptable: the count and
+                    // last-seen change on every line anyway, so there is
+                    // nothing to skip.
+                    if let Some(cluster) = entry
+                        .cluster_id
+                        .as_ref()
+                        .and_then(|id| grouper2.get_cluster(id))
+                    {
+                        if let Err(e) = ll_core::db::queries::upsert_cluster(&pool2, &cluster).await {
+                            tracing::warn!("cluster upsert failed: {}", e);
+                        }
+                    }
+
                     // Emit to frontend
                     let _ = ah.emit("log://entry", &entry);
 
-                    // Cluster spikes
-                    let _ = ah.emit("cluster://updated", grouper2.top_errors(5));
+                    // Cluster spikes. The frontend merges these into the
+                    // list it loaded from the database rather than replacing
+                    // it, so this stays a small payload.
+                    let _ = ah.emit("cluster://updated", grouper2.top_clusters(5));
                 }
             });
 
@@ -97,6 +115,7 @@ fn main() {
             commands::list_sources,
             commands::watch_file,
             commands::watch_docker,
+            commands::watch_syslog,
             // Query
             commands::query_logs,
             commands::get_timeline,

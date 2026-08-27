@@ -1,3 +1,4 @@
+pub mod syslog;
 pub mod custom_parser;
 pub mod format_detector;
 pub mod json_parser;

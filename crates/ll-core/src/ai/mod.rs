@@ -1,6 +1,8 @@
+pub mod azure_openai;
 pub mod claude;
 pub mod ollama;
 pub mod prompts;
+pub mod response;
 
 use async_trait::async_trait;
 use anyhow::Result;

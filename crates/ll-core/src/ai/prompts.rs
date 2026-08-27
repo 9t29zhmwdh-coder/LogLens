@@ -1,10 +1,40 @@
 use crate::models::log_entry::NormalizedEntry;
 use crate::models::cluster::LogCluster;
 
+/// Fields a network classifier may have attached, in the order an operator
+/// would read them: who, then where, then against what.
+const NETWORK_FIELDS: [&str; 12] = [
+    "event_type", "vendor", "client_mac", "src_ip", "dst_ip", "src_port",
+    "dst_port", "protocol", "interface", "ssid", "rule_id", "reason",
+];
+
+/// Renders the network entities a classifier extracted, if any.
+///
+/// Without this the model sees only the vendor's own wording, which is often
+/// the least informative part of the line: hostapd says "invalid MIC in msg
+/// 2/4", never "wrong WiFi password".
+fn network_context(entry: &NormalizedEntry) -> String {
+    let Some(fields) = entry.fields.as_object() else {
+        return String::new();
+    };
+    if !fields.contains_key("event_type") {
+        return String::new();
+    }
+    let lines: Vec<String> = NETWORK_FIELDS
+        .iter()
+        .filter_map(|key| fields.get(*key).and_then(|v| v.as_str()).map(|v| format!("- {key}: {v}")))
+        .collect();
+    format!(
+        "\n\nThis is a network device log. Classified entities:\n{}\n\nAnswer as a network engineer: name the device, client and rule involved, and say what an operator should check on the equipment.",
+        lines.join("\n")
+    )
+}
+
 pub fn explain_entry_prompt(entry: &NormalizedEntry) -> String {
     let stacktrace = entry.stacktrace.as_ref()
         .map(|lines| format!("\nStacktrace:\n{}", lines.join("\n")))
         .unwrap_or_default();
+    let network = network_context(entry);
 
     format!(
         r#"You are a senior software engineer analyzing a log entry.
@@ -14,7 +44,7 @@ Log entry:
 - Level: {:?}
 - Service: {}
 - Message: {}{}
-- Raw: {}
+- Raw: {}{}
 
 Analyze this log entry and respond ONLY with a JSON object:
 {{
@@ -32,6 +62,7 @@ Analyze this log entry and respond ONLY with a JSON object:
         entry.message,
         stacktrace,
         entry.raw.chars().take(500).collect::<String>(),
+        network,
     )
 }
 
@@ -121,4 +152,60 @@ fn count_levels(entries: &[NormalizedEntry]) -> std::collections::HashMap<String
         *map.entry(format!("{:?}", e.level)).or_insert(0) += 1;
     }
     map
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::models::log_entry::{LogFormat, LogLevel};
+    use chrono::Utc;
+
+    fn entry(fields: serde_json::Value) -> NormalizedEntry {
+        NormalizedEntry {
+            id: "id".into(),
+            source_id: "src".into(),
+            source_label: "label".into(),
+            timestamp: Utc::now(),
+            level: LogLevel::Warn,
+            service: Some("hostapd".into()),
+            message: "WPA: invalid MIC in msg 2/4 of 4-Way Handshake".into(),
+            stacktrace: None,
+            fields,
+            raw: "raw line".into(),
+            format: LogFormat::Syslog,
+            fingerprint: "fp".into(),
+            cluster_id: None,
+            ingested_at: Utc::now(),
+        }
+    }
+
+    #[test]
+    fn a_classified_entry_gets_the_network_engineer_framing() {
+        let prompt = explain_entry_prompt(&entry(serde_json::json!({
+            "event_type": "wifi_auth_failure",
+            "vendor": "unifi",
+            "client_mac": "aa:bb:cc:dd:ee:ff",
+            "interface": "ath0"
+        })));
+        assert!(prompt.contains("network device log"));
+        assert!(prompt.contains("- event_type: wifi_auth_failure"));
+        assert!(prompt.contains("- client_mac: aa:bb:cc:dd:ee:ff"));
+        assert!(prompt.contains("network engineer"));
+    }
+
+    #[test]
+    fn an_unclassified_entry_keeps_the_original_prompt() {
+        let prompt = explain_entry_prompt(&entry(serde_json::json!({"facility": "local0"})));
+        assert!(!prompt.contains("network device log"));
+        assert!(prompt.contains("senior software engineer"));
+    }
+
+    #[test]
+    fn absent_entities_are_left_out_rather_than_sent_as_empty() {
+        let prompt = explain_entry_prompt(&entry(serde_json::json!({
+            "event_type": "wifi_auth_failure"
+        })));
+        assert!(!prompt.contains("client_mac"));
+        assert!(!prompt.contains("ssid"));
+    }
 }

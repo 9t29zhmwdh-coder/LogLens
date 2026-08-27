@@ -47,6 +47,29 @@ pub enum LogSourceKind {
     SystemMacos,
     Journald,
     WindowsEventLog { channel: String },
+    /// A syslog listener. Network appliances push to it; nothing is polled.
+    Syslog { bind: String, protocol: SyslogTransport },
+}
+
+/// Which transport a syslog listener accepts. UDP is what most appliances
+/// default to; TCP is offered because UDP silently drops under load, which
+/// is the worst property a log transport can have during an incident.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum SyslogTransport {
+    Udp,
+    Tcp,
+    Both,
+}
+
+impl SyslogTransport {
+    pub fn accepts_udp(&self) -> bool {
+        matches!(self, Self::Udp | Self::Both)
+    }
+
+    pub fn accepts_tcp(&self) -> bool {
+        matches!(self, Self::Tcp | Self::Both)
+    }
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]

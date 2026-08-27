@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { api } from '../lib/tauri'
 import { useT } from '../lib/i18n'
 import { useSettingsStore } from '../stores/settingsStore'
-import type { LogSource } from '../lib/tauri'
+import type { LogSource, SyslogTransport } from '../lib/tauri'
 
 export default function SourcesView() {
   const [sources, setSources] = useState<LogSource[]>([])
@@ -10,6 +10,8 @@ export default function SourcesView() {
   const [fileLabel, setFileLabel] = useState('')
   const [dockerId, setDockerId] = useState('')
   const [parserHint, setParserHint] = useState('')
+  const [syslogBind, setSyslogBind] = useState('0.0.0.0:5514')
+  const [syslogProtocol, setSyslogProtocol] = useState<SyslogTransport>('udp')
   const [status, setStatus] = useState('')
   const { settings } = useSettingsStore()
   const t = useT()
@@ -31,6 +33,15 @@ export default function SourcesView() {
     try {
       await api.watchDocker(dockerId.trim(), undefined, parserHint || undefined)
       setDockerId(''); setStatus(t('sources.dockerSourceAdded'))
+      reload()
+    } catch (e) { setStatus(String(e)) }
+  }
+
+  const addSyslog = async () => {
+    if (!syslogBind.trim()) return
+    try {
+      await api.watchSyslog(syslogBind.trim(), syslogProtocol)
+      setStatus(t('sources.syslogSourceAdded'))
       reload()
     } catch (e) { setStatus(String(e)) }
   }
@@ -93,6 +104,33 @@ export default function SourcesView() {
           <button onClick={addDocker}
             className="px-4 py-1.5 bg-ll-accent/20 text-ll-accent rounded-sm hover:bg-ll-accent/30 text-sm transition-colors">
             {t('sources.watch')}
+          </button>
+        </div>
+      </div>
+
+      {/* Add syslog listener */}
+      <div className="bg-ll-surface border border-ll-border rounded-lg p-4 space-y-3">
+        <div className="text-sm font-medium text-gray-300">{t('sources.addSyslogTitle')}</div>
+        <div className="text-xs text-ll-muted">{t('sources.syslogHint')}</div>
+        <div className="flex gap-2">
+          <input
+            placeholder="0.0.0.0:5514"
+            className="flex-1 bg-ll-bg border border-ll-border rounded-sm px-3 py-1.5 text-sm text-gray-200 placeholder-ll-muted focus:outline-hidden focus:border-ll-accent"
+            value={syslogBind} onChange={e => setSyslogBind(e.target.value)}
+          />
+          <select
+            aria-label={t('sources.syslogProtocol')}
+            value={syslogProtocol}
+            onChange={e => setSyslogProtocol(e.target.value as SyslogTransport)}
+            className="bg-ll-bg border border-ll-border rounded-sm px-2 py-1.5 text-sm text-gray-200 focus:outline-hidden focus:border-ll-accent"
+          >
+            <option value="udp">UDP</option>
+            <option value="tcp">TCP</option>
+            <option value="both">UDP + TCP</option>
+          </select>
+          <button onClick={addSyslog}
+            className="px-4 py-1.5 bg-ll-accent/20 text-ll-accent rounded-sm hover:bg-ll-accent/30 text-sm transition-colors">
+            {t('sources.syslogListen')}
           </button>
         </div>
       </div>

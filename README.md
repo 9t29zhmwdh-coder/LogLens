@@ -42,17 +42,67 @@ is the one that watches and flags anomalies as they occur.
 
 LogLens's UI is available in English (default) and German; switch anytime with the language toggle.
 
-**In practice:** you point LogLens at a log file or Docker container, it clusters recurring errors by fingerprint so you see 1 entry instead of 500 duplicates, and on request asks Claude (default) or a local Ollama model to explain the root cause with concrete fix steps.
+**In practice:** you point LogLens at a log file, a Docker container or a syslog listener, it clusters recurring errors by fingerprint so you see 1 entry instead of 500 duplicates, and on request asks Claude (default), Azure OpenAI or a local Ollama model to explain the root cause with concrete fix steps.
 
 ## Overview
 
 LogLens is a cross-platform developer tool that **collects, normalizes, clusters and explains logs** from any source; local files, Docker containers and system logs. It combines full-text search with AI-generated explanations (Claude by default, or a local Ollama model) to reduce triage time from hours to minutes.
 
+## Network logs
+
+Point a firewall, gateway or access point at LogLens and it reads what they
+say, rather than showing you the line and leaving the reading to you.
+
+![Network logs from UniFi, pfSense and RouterOS in one view](docs/network-logs.png)
+
+```
+$ python3 examples/send-demo-syslog.py    # synthetic sample stream
+
+  wifi_auth_failure   a2:00:00:00:00:44 on ap-lab, ath0, invalid_psk   x12
+  firewall_blocked    203.0.113.x to 192.0.2.14:3389, WAN_IN-2000-D     x8
+  dhcp_lease_granted  74:ac:b9:00:00:11 got 192.0.2.87 on br0
+```
+
+Twelve failed handshakes from one client is a device with a stale WiFi
+password, not twelve unrelated warnings. The classifier gives every one of
+them the same event type, so the cluster view groups them and the AI
+explanation gets the client, the access point and the radio as facts rather
+than as text to guess from.
+
+![Recurring patterns grouped with their occurrence counts](docs/network-clusters.png)
+
+| Source | Formats read |
+|---|---|
+| UniFi / UISP | hostapd association and WPA handshakes, dnsmasq DHCP, netfilter rules with the UniFi rule name |
+| pfSense / OPNsense | `filterlog` positional CSV, IPv4 and IPv6, with the full five-tuple |
+| Mikrotik RouterOS | topic-prefixed firewall, wireless and DHCP lines |
+| Anything else | Any RFC 5424 or RFC 3164 sender, indexed and searchable even when no classifier recognizes it |
+
+**Setting it up.** Add a listener under Sources, then point the appliance at
+it. In UniFi that is Settings, System, Remote Syslog Server. The default
+port is 5514 rather than 514, so the application never needs root; forward
+514 to it if the sender cannot be changed.
+
+**Before you rely on it.** The syslog layer is tested against the examples
+in RFC 5424 and RFC 3164 themselves. The vendor patterns are built from
+published log samples and from the upstream projects the wording comes from,
+and have not yet been replayed against a live controller. Unrecognized lines
+are kept and indexed, never silently dropped, so a gap shows up as an
+unclassified entry rather than as missing data.
+
+**What leaves your machine.** Nothing, with the default local backend.
+Network logs carry MAC addresses, internal addresses and host names, so
+choosing a hosted model means those reach that provider. See
+[ARCHITECTURE.md](ARCHITECTURE.md#security).
+
+---
+
 ## Features
 
 | Module | What it does |
 |---|---|
-| **Multi-source collector** | Files, directories (glob), Docker containers & services, macOS Unified Logging, journald, Windows EventLog, stdin |
+| **Multi-source collector** | Files, directories (glob), Docker containers & services, macOS Unified Logging, journald, Windows EventLog, syslog listener, stdin |
+| **Network log analysis** | A syslog listener (RFC 5424 and RFC 3164) that classifies UniFi, pfSense, OPNsense and RouterOS lines into typed events with the MAC, address, port and rule extracted |
 | **Format detection** | JSON, plaintext, key=value, Nginx combined, Docker JSON-file, syslog: auto-detected |
 | **Custom parsers** | Define your own format via a regex template with named capture groups, assign it to a source in Settings → Custom Parsers |
 | **Stacktrace merging** | Multi-line stacktraces (Rust, Java, Python, JS) are automatically combined into a single entry |

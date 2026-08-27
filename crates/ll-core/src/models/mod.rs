@@ -1,3 +1,4 @@
+pub mod network_event;
 pub mod log_entry;
 pub mod cluster;
 pub mod analysis;

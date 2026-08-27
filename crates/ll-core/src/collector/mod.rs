@@ -2,6 +2,7 @@ pub mod file_collector;
 pub mod docker_collector;
 pub mod system_collector;
 pub mod stream_collector;
+pub mod syslog_collector;
 
 use std::sync::Arc;
 use tokio::sync::mpsc;
@@ -71,6 +72,11 @@ impl LogCollector {
             }
             LogSourceKind::Journald => {
                 tokio::spawn(system_collector::run_journald(src, tx, grouper, custom_parsers, cancel_rx));
+            }
+            LogSourceKind::Syslog { bind, protocol } => {
+                let bind = bind.clone();
+                let protocol = *protocol;
+                tokio::spawn(syslog_collector::run(src, bind, protocol, tx, grouper, cancel_rx));
             }
             LogSourceKind::WindowsEventLog { channel } => {
                 let ch = channel.clone();
