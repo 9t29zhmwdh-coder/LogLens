@@ -113,8 +113,17 @@ function LogLine({ entry, selected, onClick }: {
       className={`flex items-start gap-2 px-3 py-0.5 cursor-pointer hover:bg-white/5 border-b border-ll-border/30
         ${selected ? 'bg-ll-accent/10' : ''}`}
     >
-      <span className="text-ll-muted shrink-0 w-20">
-        {new Date(entry.timestamp).toLocaleTimeString(dateLocale(), { hour12: false, fractionalSecondDigits: 3 })}
+      {/* `fractionalSecondDigits` alone formats only the fraction: without
+          naming hour, minute and second, this returned the literal "000",
+          which is what the time column showed on every line. */}
+      <span className="text-ll-muted shrink-0 w-28 whitespace-nowrap tabular-nums">
+        {new Date(entry.timestamp).toLocaleTimeString(dateLocale(), {
+          hour12: false,
+          hour: '2-digit',
+          minute: '2-digit',
+          second: '2-digit',
+          fractionalSecondDigits: 3,
+        })}
       </span>
       <span className={`shrink-0 w-12 uppercase ${LEVEL_COLORS[entry.level] ?? ''}`}>
         {entry.level}

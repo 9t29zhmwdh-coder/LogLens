@@ -35,8 +35,8 @@ impl MacAddr {
             return None;
         }
         let mut octets = [0u8; 6];
-        for (i, pair) in hex.chunks_exact(2).enumerate() {
-            octets[i] = (pair[0] << 4) | pair[1];
+        for (octet, pair) in octets.iter_mut().zip(hex.chunks(2)) {
+            *octet = (pair[0] << 4) | pair[1];
         }
         Some(Self(octets))
     }
