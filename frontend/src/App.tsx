@@ -16,6 +16,7 @@ export default function App() {
   const [view, setView] = useState<View>('logs')
   const addEntry = useLogStore(s => s.addEntry)
   const setClusters = useClusterStore(s => s.setClusters)
+  const mergeClusters = useClusterStore(s => s.mergeClusters)
   const { setSettings, setHasKey } = useSettingsStore()
   const t = useT()
   const { lang, toggle } = useLangStore()
@@ -27,7 +28,7 @@ export default function App() {
 
     const unsubs = [
       events.onLogEntry(addEntry),
-      events.onClusterUpdate(setClusters),
+      events.onClusterUpdate(mergeClusters),
     ]
 
     return () => { unsubs.forEach(p => p.then(f => f())) }

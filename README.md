@@ -53,6 +53,8 @@ LogLens is a cross-platform developer tool that **collects, normalizes, clusters
 Point a firewall, gateway or access point at LogLens and it reads what they
 say, rather than showing you the line and leaving the reading to you.
 
+![Network logs from UniFi, pfSense and RouterOS in one view](docs/network-logs.png)
+
 ```
 $ python3 examples/send-demo-syslog.py    # synthetic sample stream
 
@@ -66,6 +68,8 @@ password, not twelve unrelated warnings. The classifier gives every one of
 them the same event type, so the cluster view groups them and the AI
 explanation gets the client, the access point and the radio as facts rather
 than as text to guess from.
+
+![Recurring patterns grouped with their occurrence counts](docs/network-clusters.png)
 
 | Source | Formats read |
 |---|---|

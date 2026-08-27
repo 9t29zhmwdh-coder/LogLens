@@ -26,7 +26,11 @@ impl LogCluster {
             fingerprint: fingerprint.into(),
             template: template.into(),
             level,
-            count: 1,
+            // Zero, not one: the only caller runs `update_cluster` right
+            // after this, and that increments. Starting at one counted the
+            // first entry twice, so every cluster reported one occurrence
+            // more than it held.
+            count: 0,
             first_seen: now,
             last_seen: now,
             source_ids: Vec::new(),

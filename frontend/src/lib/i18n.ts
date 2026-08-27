@@ -25,7 +25,7 @@ const translations: Record<Lang, Dict> = {
       what: 'What:', why: 'Why:', fixSuggestions: 'Fix suggestions',
     },
     clusters: {
-      errorClusters: 'Error Clusters',
+      errorClusters: 'Clusters',
       rootCauseAnalysis: 'Root Cause Analysis',
       template: 'Template', count: 'Count', level: 'Level',
       analyzingAi: 'Analyzing with AI...',
@@ -90,7 +90,7 @@ const translations: Record<Lang, Dict> = {
       what: 'Was:', why: 'Warum:', fixSuggestions: 'Lösungsvorschläge',
     },
     clusters: {
-      errorClusters: 'Fehler-Cluster',
+      errorClusters: 'Cluster',
       rootCauseAnalysis: 'Root-Cause-Analyse',
       template: 'Vorlage', count: 'Anzahl', level: 'Level',
       analyzingAi: 'KI analysiert...',

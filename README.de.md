@@ -58,6 +58,8 @@ LogLens ist ein plattformübergreifendes Entwicklerwerkzeug, das **Logs aus beli
 Zeig mit Firewall, Gateway oder Access Point auf LogLens, und es liest, was
 sie sagen, statt dir die Zeile hinzulegen und das Lesen dir zu überlassen.
 
+![Netzwerk-Logs von UniFi, pfSense und RouterOS in einer Ansicht](docs/network-logs.png)
+
 ```
 $ python3 examples/send-demo-syslog.py    # synthetischer Beispielstrom
 
@@ -71,6 +73,8 @@ veralteten WLAN-Passwort, nicht zwölf unabhängige Warnungen. Die
 Klassifizierung gibt allen dasselbe Ereignis, dadurch gruppiert die
 Cluster-Ansicht sie, und die KI-Erklärung bekommt Client, Access Point und
 Funkband als Fakten statt als Text, den sie erraten muss.
+
+![Wiederkehrende Muster mit ihrer Häufigkeit gruppiert](docs/network-clusters.png)
 
 | Quelle | Gelesene Formate |
 |---|---|

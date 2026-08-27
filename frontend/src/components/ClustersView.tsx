@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useClusterStore } from '../stores/clusterStore'
 import { api } from '../lib/tauri'
-import { useT } from '../lib/i18n'
+import { dateLocale, useT } from '../lib/i18n'
 import type { LogCluster, RootCauseReport } from '../lib/tauri'
 
 const LEVEL_BADGE: Record<string, string> = {
@@ -57,7 +57,7 @@ export default function ClustersView() {
             </div>
             <div className="flex items-center gap-3 text-[11px] text-ll-muted">
               {c.services.length > 0 && <span>{c.services.slice(0, 3).join(', ')}</span>}
-              <span>{new Date(c.last_seen).toLocaleString()}</span>
+              <span>{new Date(c.last_seen).toLocaleString(dateLocale())}</span>
             </div>
           </div>
         ))}

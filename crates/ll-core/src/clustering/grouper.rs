@@ -97,6 +97,17 @@ impl ClusterGrouper {
         self.clusters.get(id).map(|c| c.clone())
     }
 
+    /// The largest clusters regardless of level. `top_errors` stays as it is
+    /// because the statistics view genuinely wants errors only; the live
+    /// update does not, and filtering there meant a site whose logs carry no
+    /// errors saw an empty clusters view.
+    pub fn top_clusters(&self, n: usize) -> Vec<LogCluster> {
+        let mut clusters: Vec<_> = self.clusters.iter().map(|e| e.value().clone()).collect();
+        clusters.sort_by_key(|c| std::cmp::Reverse(c.count));
+        clusters.truncate(n);
+        clusters
+    }
+
     pub fn top_errors(&self, n: usize) -> Vec<LogCluster> {
         let mut clusters: Vec<_> = self.clusters.iter()
             .filter(|e| e.level >= LogLevel::Error)

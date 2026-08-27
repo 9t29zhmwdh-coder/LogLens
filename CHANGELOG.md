@@ -25,6 +25,16 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - The RFC 3164 tag delimiter was a bare colon, which cut a leading MAC address in half. RouterOS opens its wireless lines with exactly that, so the client address was lost on every one of them. The delimiter is now a colon followed by a space, which is the actual convention.
 
+- **The whole interface had lost its spacing.** A global `* { margin: 0; padding: 0 }` sat outside any cascade layer. Tailwind 4 puts its utilities into real layers, and an unlayered rule beats a layered one no matter the specificity, so every padding, margin and gap utility in the application was overridden. Cards had no borders or inner space, the search bar sat flush against its edges, everything ran together. Moving the reset into `@layer base` restores the layout the markup has described all along. This regressed with the Tailwind 4 upgrade in 1.2.x.
+
+- **The time column showed "000" on every log line, since the first commit.** `toLocaleTimeString` with `fractionalSecondDigits` but without `hour`, `minute` and `second` formats only the fraction, so the call returned that literal string.
+
+- **The clusters view was always empty.** `upsert_cluster` existed but nothing called it, so the grouper's work never left memory while the view reads the table. On top of that, the live update replaced the whole list with `top_errors(5)` on every incoming entry, which emptied the view again wherever the logs carry no errors. Clusters are now persisted as entries arrive, and the live update merges into the loaded list instead of replacing it, using the largest clusters rather than only the failing ones. The view is renamed from "Error clusters" to "Clusters" to match what it now shows.
+
+- **Every cluster counted one occurrence too many.** `LogCluster::new` started the counter at one and the only caller incremented it immediately after, so the first entry was counted twice.
+
+- The cluster list formatted its timestamps with a bare `toLocaleString()`, which follows the operating system rather than the language selected in the application. It now uses the same locale as the rest of the interface.
+
 - The frontend's `LogSourceKind` named its variants in PascalCase while serde serializes them in snake_case. The type never matched what the backend sends. It was only ever passed to `JSON.stringify` for display, so nothing broke, but the declaration was wrong.
 
 ### Changed
