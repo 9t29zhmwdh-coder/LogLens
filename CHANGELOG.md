@@ -5,6 +5,34 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [1.3.0] - 2026-08-27
+
+### Added
+
+- **Network log analysis.** A syslog listener as a new source type, plus a classification layer that reads what network equipment says instead of only showing the line. UniFi, pfSense, OPNsense and Mikrotik RouterOS are recognized; anything else that speaks syslog is still indexed and searchable.
+
+  The syslog layer parses both wire formats and decides per line, not per source, because a site with mixed equipment sends RFC 5424 and RFC 3164 to the same port. Both parsers are tested against the examples printed in the RFCs themselves, including the year inference RFC 3164 needs because its timestamp carries no year: a December stamp read in January belongs to the previous year, while a device whose clock runs an hour fast must not be pushed back twelve months.
+
+  The classification layer maps vendor wording onto shared event types. A wrong WiFi password reaches `wifi_auth_failure` whether it arrived as hostapd's `WPA: invalid MIC in msg 2/4` or as RouterOS's `rejected`, which is what lets the existing clustering group twelve failed handshakes from one device into one entry instead of twelve warnings. Extracted entities, the client MAC, the five-tuple, the interface, the firewall rule id, land in the entry's `fields`, so they are searchable through the existing FTS5 index with no schema change.
+
+- **Azure OpenAI as an AI provider**, alongside Claude and Ollama. It authenticates with either a resource key or an Entra ID token, so a managed identity works without a long-lived secret. The endpoint is validated against `*.openai.azure.com` and `*.cognitiveservices.azure.com`: prompts carry log content, and a mistyped host would send it somewhere else. Error bodies from the service are not surfaced, because they can echo the prompt back.
+
+- **`examples/send-demo-syslog.py`**, a generator that produces a synthetic network log stream for trying the listener out. Every address in it comes from the ranges RFC 5737 and RFC 3849 reserve for documentation, and the MAC addresses carry a real vendor prefix with an invented device half.
+
+- The AI prompt now names the classified entities when an entry carries them, and asks for an answer from a network engineer rather than a software engineer. Without it the model sees only the vendor's phrasing, which is the least informative part of the line: hostapd says `invalid MIC in msg 2/4`, never `wrong WiFi password`.
+
+### Fixed
+
+- The RFC 3164 tag delimiter was a bare colon, which cut a leading MAC address in half. RouterOS opens its wireless lines with exactly that, so the client address was lost on every one of them. The delimiter is now a colon followed by a space, which is the actual convention.
+
+- The frontend's `LogSourceKind` named its variants in PascalCase while serde serializes them in snake_case. The type never matched what the backend sends. It was only ever passed to `JSON.stringify` for display, so nothing broke, but the declaration was wrong.
+
+### Changed
+
+- The conversion from a model's JSON reply into the analysis types moved out of the Claude provider into `ai/response`, shared by all three providers. It gained the tests it never had, and with them a fix: a confidence value is now clamped to 0.0 through 1.0, because a model asked for that range will occasionally answer 95, and the value goes straight into the interface.
+
+---
+
 ## [1.2.3] - 2026-08-04
 
 ### Changed

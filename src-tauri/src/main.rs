@@ -97,6 +97,7 @@ fn main() {
             commands::list_sources,
             commands::watch_file,
             commands::watch_docker,
+            commands::watch_syslog,
             // Query
             commands::query_logs,
             commands::get_timeline,

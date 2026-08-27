@@ -31,13 +31,18 @@ export interface LogSource {
   created_at: string
 }
 
+// serde serializes these variants in snake_case; the names here must match
+// what the backend actually sends, not the Rust variant spelling.
 export type LogSourceKind =
-  | { File: { path: string } }
-  | { Directory: { path: string; pattern?: string } }
-  | { DockerContainer: { container_id: string; name: string } }
-  | { DockerService: { service_name: string } }
-  | 'Stdin' | 'SystemMacos' | 'Journald'
-  | { WindowsEventLog: { channel: string } }
+  | { file: { path: string } }
+  | { directory: { path: string; pattern?: string } }
+  | { docker_container: { container_id: string; name: string } }
+  | { docker_service: { service_name: string } }
+  | 'stdin' | 'system_macos' | 'journald'
+  | { windows_event_log: { channel: string } }
+  | { syslog: { bind: string; protocol: SyslogTransport } }
+
+export type SyslogTransport = 'udp' | 'tcp' | 'both'
 
 export interface QueryFilter {
   text?: string
@@ -171,6 +176,8 @@ export const api = {
     invoke<string>('watch_file', { path, label, parserHint }),
   watchDocker: (containerId: string, name?: string, parserHint?: string) =>
     invoke<string>('watch_docker', { containerId, name, parserHint }),
+  watchSyslog: (bind: string, protocol?: SyslogTransport, label?: string) =>
+    invoke<string>('watch_syslog', { bind, protocol, label }),
   removeSource: (sourceId: string) => invoke<void>('remove_source', { sourceId }),
   listSources: () => invoke<LogSource[]>('list_sources'),
 

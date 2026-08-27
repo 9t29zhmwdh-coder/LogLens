@@ -47,17 +47,65 @@ und Auffälligkeiten meldet, sobald sie auftreten.
 
 Die Oberfläche von LogLens ist auf Englisch (Standard) und Deutsch verfügbar, umschaltbar über den Sprachtoggle.
 
-**In der Praxis:** du zeigst LogLens auf eine Logdatei oder einen Docker-Container, es clustert wiederkehrende Fehler per Fingerprint, sodass du 1 Eintrag statt 500 Duplikaten siehst, und lässt auf Wunsch Claude (Standard) oder ein lokales Ollama-Modell die Ursache mit konkreten Lösungsschritten erklären.
+**In der Praxis:** du zeigst LogLens auf eine Logdatei, einen Docker-Container oder einen Syslog-Empfänger, es clustert wiederkehrende Fehler per Fingerprint, sodass du 1 Eintrag statt 500 Duplikaten siehst, und lässt auf Wunsch Claude (Standard), Azure OpenAI oder ein lokales Ollama-Modell die Ursache mit konkreten Lösungsschritten erklären.
 
 ## Übersicht
 
 LogLens ist ein plattformübergreifendes Entwicklerwerkzeug, das **Logs aus beliebigen Quellen sammelt, normalisiert, clustert und erklärt**; lokale Dateien, Docker-Container und Systemlogs. Die Kombination aus Volltextsuche und KI-generierten Erklärungen (Claude oder Ollama) reduziert die Fehlersuche von Stunden auf Minuten.
 
+## Netzwerk-Logs
+
+Zeig mit Firewall, Gateway oder Access Point auf LogLens, und es liest, was
+sie sagen, statt dir die Zeile hinzulegen und das Lesen dir zu überlassen.
+
+```
+$ python3 examples/send-demo-syslog.py    # synthetischer Beispielstrom
+
+  wifi_auth_failure   a2:00:00:00:00:44 auf ap-lab, ath0, invalid_psk   x12
+  firewall_blocked    203.0.113.x zu 192.0.2.14:3389, WAN_IN-2000-D      x8
+  dhcp_lease_granted  74:ac:b9:00:00:11 erhielt 192.0.2.87 auf br0
+```
+
+Zwölf fehlgeschlagene Handshakes von einem Client sind ein Gerät mit einem
+veralteten WLAN-Passwort, nicht zwölf unabhängige Warnungen. Die
+Klassifizierung gibt allen dasselbe Ereignis, dadurch gruppiert die
+Cluster-Ansicht sie, und die KI-Erklärung bekommt Client, Access Point und
+Funkband als Fakten statt als Text, den sie erraten muss.
+
+| Quelle | Gelesene Formate |
+|---|---|
+| UniFi / UISP | hostapd-Association und WPA-Handshakes, dnsmasq-DHCP, netfilter-Regeln samt UniFi-Regelnamen |
+| pfSense / OPNsense | `filterlog` als positionsbasiertes CSV, IPv4 und IPv6, mit vollständigem Fünf-Tupel |
+| Mikrotik RouterOS | Firewall-, Wireless- und DHCP-Zeilen mit Topic-Präfix |
+| Alles andere | Jeder RFC-5424- oder RFC-3164-Sender, indexiert und durchsuchbar, auch wenn keine Klassifizierung greift |
+
+**Einrichten.** Unter Quellen einen Empfänger anlegen, dann das Gerät
+darauf zeigen lassen. Bei UniFi steht das unter Einstellungen, System,
+Remote-Syslog-Server. Der Standardport ist 5514 statt 514, damit die
+Anwendung nie Root-Rechte braucht; leite 514 dorthin weiter, falls sich der
+Sender nicht umstellen lässt.
+
+**Bevor du dich darauf verlässt.** Die Syslog-Ebene ist gegen die Beispiele
+aus RFC 5424 und RFC 3164 selbst getestet. Die herstellerspezifischen Muster
+stammen aus veröffentlichten Log-Beispielen und aus den Projekten, aus denen
+der Wortlaut kommt, und wurden noch nicht gegen einen laufenden Controller
+gegengeprüft. Nicht erkannte Zeilen bleiben erhalten und werden indexiert,
+sie verschwinden nie stillschweigend. Eine Lücke zeigt sich also als nicht
+klassifizierter Eintrag, nicht als fehlende Daten.
+
+**Was deinen Rechner verlässt.** Mit dem lokalen Backend nichts.
+Netzwerk-Logs enthalten MAC-Adressen, interne Adressen und Hostnamen. Wer
+ein gehostetes Modell wählt, schickt genau diese Angaben dorthin. Siehe
+[ARCHITECTURE.md](ARCHITECTURE.md#security).
+
+---
+
 ## Funktionen
 
 | Modul | Beschreibung |
 |---|---|
-| **Multi-Source-Collector** | Dateien, Verzeichnisse (Glob), Docker-Container & Services, macOS Unified Logging, journald, Windows EventLog, stdin |
+| **Multi-Source-Collector** | Dateien, Verzeichnisse (Glob), Docker-Container & Services, macOS Unified Logging, journald, Windows EventLog, Syslog-Empfänger, stdin |
+| **Netzwerk-Loganalyse** | Ein Syslog-Empfänger (RFC 5424 und RFC 3164), der Zeilen von UniFi, pfSense, OPNsense und RouterOS in typisierte Ereignisse einordnet, mit MAC, Adresse, Port und Regel als eigene Felder |
 | **Formaterkennung** | JSON, Plaintext, key=value, Nginx Combined, Docker JSON-File, Syslog: automatisch erkannt |
 | **Eigene Parser** | Eigenes Format über eine Regex-Vorlage mit benannten Capture-Groups definieren, einer Quelle unter Einstellungen → Eigene Parser zuweisen |
 | **Stacktrace-Zusammenführung** | Mehrzeilige Stacktraces (Rust, Java, Python, JS) werden automatisch zu einem Eintrag zusammengefasst |
