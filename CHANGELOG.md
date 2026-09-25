@@ -5,6 +5,14 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [1.3.1] - 2026-09-25
+
+### Fixed
+
+- **Stable code signature on macOS.** The app was only signed by the linker, with an identifier generated per build instead of the bundle ID. macOS ties keychain access to that identity, so after every update the app could lose access to the credentials it stored and ask again. The bundle is now signed ad hoc as a whole (`signingIdentity "-"`), with the bundle ID as its identifier.
+
+---
+
 ## [1.3.0] - 2026-08-27
 
 ### Added
