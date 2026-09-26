@@ -15,7 +15,7 @@
     "date-fns": "^3",
     "react": "^19",
     "react-dom": "^19",
-    "recharts": "^2",
+    "recharts": "^3",
     "zustand": "^5"
   },
   "devDependencies": {
