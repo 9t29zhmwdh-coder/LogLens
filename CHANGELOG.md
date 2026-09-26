@@ -5,6 +5,18 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [1.3.2] - 2026-09-25
+
+### Security
+
+- The app now runs with a Content Security Policy. Until now the configuration set none, so any script that found its way into the interface, for example through a crafted log line rendered somewhere unescaped, could have run with full access to the app's commands. The policy only allows the app's own scripts, styles and fonts plus the Tauri bridge, and blocks everything external.
+
+### Fixed
+
+- Every start fetched the JetBrains Mono font from Google Fonts, which told Google the address and start time of every machine running LogLens, although the privacy statement says no data leaves the device. The font now ships inside the app.
+
+---
+
 ## [1.3.1] - 2026-09-25
 
 ### Fixed
