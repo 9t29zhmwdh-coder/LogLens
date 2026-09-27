@@ -5,6 +5,14 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [1.3.4] - 2026-09-27
+
+### Fixed
+
+- The interface now starts in the system language (German on a German-language system, English otherwise) until you pick one with the language toggle. Before, it always started in English, whatever the system language. A stored value other than `en` or `de` no longer passes through unchecked.
+
+---
+
 ## [1.3.3] - 2026-09-27
 
 ### Changed
