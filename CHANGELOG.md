@@ -5,6 +5,18 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [1.3.3] - 2026-09-27
+
+### Changed
+
+Dependency and CI updates merged since v1.3.2, each with green checks:
+
+- chore(ci): bump the actions group across 1 directory with 5 updates (#101)
+- chore(deps): bump the npm group across 1 directory with 9 updates (#100)
+- chore(deps): bump the cargo group across 1 directory with 7 updates (#103)
+
+---
+
 ## [1.3.2] - 2026-09-25
 
 ### Security
