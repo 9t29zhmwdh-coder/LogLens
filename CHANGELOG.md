@@ -5,6 +5,17 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [1.3.8] - 2026-09-30
+
+### Changed
+
+Dependency and CI updates merged since v1.3.7, each with green checks:
+
+- chore(deps): bump dirs from 6.0.0 to 7.0.0 (#108)
+- chore(deps): bump date-fns from 3.6.0 to 4.4.0 in /frontend (#86)
+
+---
+
 ## [1.3.7] - 2026-09-30
 
 ### Changed
