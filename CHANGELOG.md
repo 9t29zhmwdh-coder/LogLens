@@ -5,6 +5,18 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [1.3.5] - 2026-09-30
+
+### Changed
+
+- **Own app icon.** Until now every tool in the portfolio carried the same RayStudio logo, byte for byte identical, so they could not be told apart in the Dock or in the title bar. LogLens now gets its own mark in the established house style: a round frame with a gold edge, a deep dark ground, the initials in a Didone serif and the golden ray with a sparkle across it.
+
+  There are two versions, as Apple and Microsoft also keep it: from 128 points upwards the detailed one with the lettering, below that one without. Letterspaced capitals turn into a grey stripe at 32 points and only take space away from the initials.
+
+  The colour values were read from `RegistrarCheck.png` rather than estimated: ground `#010d22`, gold from `#a7782f` through `#e2c47e` to `#ca9f4d`. The SVG sources live in `src-tauri/icons/source/`, so the mark can be changed later without rebuilding it.
+
+---
+
 ## [1.3.4] - 2026-09-27
 
 ### Fixed
