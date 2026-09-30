@@ -5,6 +5,16 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [1.3.9] - 2026-09-30
+
+### Changed
+
+Dependency and CI updates merged since v1.3.8, each with green checks:
+
+- chore(deps): bump recharts from 2.15.4 to 3.10.1 in /frontend (#87)
+
+---
+
 ## [1.3.8] - 2026-09-30
 
 ### Changed
