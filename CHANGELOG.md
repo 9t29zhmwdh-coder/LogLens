@@ -5,6 +5,19 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [1.3.11] - 2026-10-12
+
+### Changed
+
+Dependency and CI updates merged since v1.3.10, each with green checks:
+
+- chore(deps): bump the npm group across 1 directory with 3 updates (#115)
+- chore(deps): bump the cargo group with 2 updates (#116)
+- chore(ci): bump the actions group with 5 updates (#117)
+- chore(deps): bump source-map-js from 1.2.1 to 1.2.2 in /frontend (#119)
+
+---
+
 ## [1.3.10] - 2026-10-11
 
 ### Fixed
